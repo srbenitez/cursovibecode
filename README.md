@@ -14,47 +14,9 @@ supabase/
 metodo/regla_clasificacion.md  la regla explicada, con registro de cambios
 ```
 
-## Puesta en marcha (una sola vez, desde su computador)
+## Puesta en marcha
 
-Necesita Node.js 18 o superior. Los comandos usan `npx supabase`, así que no hace falta instalar el CLI.
-
-**1 · Crear el proyecto en Supabase.** En [supabase.com](https://supabase.com), cree un proyecto nuevo. Anote el *Project ref*: es la parte `xxxx` de `https://xxxx.supabase.co`.
-
-**2 · Clonar el repositorio y vincularlo**
-```bash
-git clone https://github.com/srbenitez/cursovibecode.git
-cd cursovibecode
-git checkout claude/affectionate-pasteur-gmcv7u
-npx supabase init          # crea supabase/config.toml; responda «N» a las preguntas
-npx supabase login         # abre el navegador
-npx supabase link --project-ref SU_PROJECT_REF
-```
-
-> **Antes del paso 3:** revise la asignación subcategoría → categoría en `supabase/migrations/20260924000002_catalogo.sql`. Se dedujo del PDF y está pendiente de confirmar.
-
-**3 · Crear las tablas, el bucket y el catálogo**
-```bash
-npx supabase db push
-```
-
-**4 · Guardar la API key de Anthropic como secreto** (nunca en el repositorio)
-```bash
-npx supabase secrets set ANTHROPIC_API_KEY=sk-ant-...
-```
-También puede hacerlo en el panel: *Edge Functions → Secrets*.
-
-**5 · Desplegar la función**
-```bash
-npx supabase functions deploy analizar-imagen
-```
-
-**6 · Crear su usuario y cerrar el registro público.** En el panel de Supabase:
-- *Authentication → Users → Add user*: su correo y una contraseña, con **Auto Confirm User** marcado.
-- *Authentication → Sign In / Providers*: **desactive «Allow new users to sign up»**. Es importante, porque la clave pública está en la página web y cualquiera podría registrarse.
-
-**7 · Conectar la página.** En *Project Settings → API* copie la **URL** y la clave **anon** (o *publishable*) en `docs/js/config.js`. Después haga commit y push.
-
-**8 · Publicar en GitHub Pages.** En GitHub: *Settings → Pages → Deploy from a branch*, rama `claude/affectionate-pasteur-gmcv7u` (o `main`, cuando la fusione), carpeta **`/docs`**. En unos minutos queda en `https://srbenitez.github.io/cursovibecode/`.
+Siga **[PASO_A_PASO.md](PASO_A_PASO.md)**: explica cada clic y cada comando, desde crear las cuentas hasta la primera prueba.
 
 ## Probar
 1. Ingrese con su correo y contraseña.
@@ -71,7 +33,7 @@ npx supabase functions deploy analizar-imagen
 | Marcar ✗ sin cambiar ningún valor | la app pide cambiar al menos uno |
 
 ## Costo aproximado
-Con `claude-opus-5`, cada imagen cuesta unos **US$ 0,03 a 0,05**: unos 3.500 tokens de entrada y entre 500 y 1.500 de salida. Es una estimación: los tokens reales de cada análisis quedan en la tabla `analisis`. Para reducir el costo, cambie `MODELO` en `metodo.ts` a `claude-sonnet-5` (unas 2,5 veces más barato) y suba la versión del método.
+El método usa `claude-sonnet-5` con esfuerzo `low` (US$ 2 por millón de tokens de entrada y US$ 10 por millón de salida). Calculo **alrededor de US$ 0,01 a 0,02 por imagen**: unas 100 imágenes por US$ 1 a 2. Es una estimación; el costo real de cada análisis se puede consultar con la receta del paso 18 de PASO_A_PASO.md. Si la calidad no alcanza, cambie `MODELO` en `metodo.ts` a `claude-opus-5`, que cuesta unas 2,5 veces más, y suba la versión del método.
 
 ## Seguridad
 - La API key de Anthropic existe solo como secreto de la Edge Function.

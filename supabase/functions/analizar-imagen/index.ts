@@ -89,13 +89,9 @@ Deno.serve(async (req) => {
   // 4. Llamar a Claude con visión y salida JSON con esquema fijo
   let fila: Record<string, unknown>;
   try {
-    const respuesta = await anthropic.beta.messages.create({
+    const respuesta = await anthropic.messages.create({
       model: MODELO,
-      max_tokens: 16000,
-      betas: ["server-side-fallback-2026-07-01"],
-      // Si el modelo declina la solicitud, Anthropic la reintenta con otro modelo;
-      // el modelo que respondió queda en «modelo_servido».
-      fallbacks: "default",
+      max_tokens: 4000,
       thinking: { type: "adaptive" },
       output_config: {
         effort: ESFUERZO,

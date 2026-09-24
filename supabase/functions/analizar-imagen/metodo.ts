@@ -5,12 +5,14 @@
 
 export const VERSION = "v1.0";
 
-// Modelo de Claude con visión. Para bajar el costo por imagen puede usar
-// "claude-sonnet-5"; eso es una versión nueva del método.
-export const MODELO = "claude-opus-5";
+// Modelo de Claude con visión. Sonnet 5 cuesta US$ 2 / 10 por millón de tokens
+// (entrada / salida), 2,5 veces menos que Opus 5. Si la calidad no alcanza,
+// pruebe "claude-opus-5"; eso es una versión nueva del método.
+export const MODELO = "claude-sonnet-5";
 
 // Esfuerzo de razonamiento: "low" | "medium" | "high".
-export const ESFUERZO = "medium";
+// "low" basta para clasificar y reduce los tokens de salida, que son los más caros.
+export const ESFUERZO = "low";
 
 export const CONDICIONES = [
   "poca_luz",
