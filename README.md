@@ -10,13 +10,13 @@ docs/                          página web (GitHub Pages)
 supabase/
   migrations/                  esquema, seguridad (RLS), bucket y catálogo ISO 37120
   functions/analizar-imagen/   Edge Function que llama a Claude
-    metodo.ts                  prompt + esquema + modelo = versión del método
+    index.ts                   archivo único; al inicio, el MÉTODO (prompt + esquema + modelo)
 metodo/regla_clasificacion.md  la regla explicada, con registro de cambios
 ```
 
 ## Puesta en marcha
 
-Siga **[PASO_A_PASO.md](PASO_A_PASO.md)**: explica cada clic y cada comando, desde crear las cuentas hasta la primera prueba.
+Siga **[PASO_A_PASO.md](PASO_A_PASO.md)**: todo desde el navegador, sin consola: explica cada clic desde crear el proyecto hasta la primera prueba.
 
 ## Probar
 1. Ingrese con su correo y contraseña.
@@ -33,7 +33,7 @@ Siga **[PASO_A_PASO.md](PASO_A_PASO.md)**: explica cada clic y cada comando, des
 | Marcar ✗ sin cambiar ningún valor | la app pide cambiar al menos uno |
 
 ## Costo aproximado
-El método usa `claude-sonnet-5` con esfuerzo `low` (US$ 2 por millón de tokens de entrada y US$ 10 por millón de salida). Calculo **alrededor de US$ 0,01 a 0,02 por imagen**: unas 100 imágenes por US$ 1 a 2. Es una estimación; el costo real de cada análisis se puede consultar con la receta del paso 18 de PASO_A_PASO.md. Si la calidad no alcanza, cambie `MODELO` en `metodo.ts` a `claude-opus-5`, que cuesta unas 2,5 veces más, y suba la versión del método.
+El método usa `claude-sonnet-5` con esfuerzo `low` (US$ 2 por millón de tokens de entrada y US$ 10 por millón de salida). Calculo **alrededor de US$ 0,01 a 0,02 por imagen**: unas 100 imágenes por US$ 1 a 2. Es una estimación; el costo real de cada análisis se puede consultar con la consulta del paso 13 de PASO_A_PASO.md. Si la calidad no alcanza, cambie `MODELO` al inicio de `index.ts` a `claude-opus-5`, que cuesta unas 2,5 veces más, y suba la versión del método.
 
 ## Seguridad
 - La API key de Anthropic existe solo como secreto de la Edge Function.

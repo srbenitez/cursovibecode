@@ -2,7 +2,7 @@
 
 **Fecha:** 2026-09-24 · **Modelo:** `claude-sonnet-5` · **Esfuerzo:** `low` · **Imagen:** JPEG, lado mayor 1568 px
 
-La fuente de verdad es `supabase/functions/analizar-imagen/metodo.ts`. Este archivo la explica en lenguaje humano. Si cambia el prompt, el esquema, el modelo o el tamaño de imagen, suba la versión en los dos lugares y anote el motivo abajo.
+La fuente de verdad es `supabase/functions/analizar-imagen/index.ts` (sección MÉTODO, al inicio del archivo). Este archivo la explica en lenguaje humano. Si cambia el prompt, el esquema, el modelo o el tamaño de imagen, suba la versión en los dos lugares y anote el motivo abajo.
 
 ## Qué recibe el modelo
 La imagen, su código (`IMG-0001`), la categoría ISO 37120 y la subcategoría que eligió la persona.
