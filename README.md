@@ -1,22 +1,28 @@
-# Clasificador de imágenes de problemas comunitarios (ISO 37120)
+# Ciencia Ciudadana UTPL · ISO 37120
 
-Prototipo de la **Guía 02 · Nivel 3** del curso Vibe Coding CEDIA 2026. Usted elige categoría y subcategoría y sube una imagen. Claude con visión devuelve si la imagen está **relacionada** (`si` / `no` / `no_determinable`), la **observabilidad**, una **descripción** de lo visible, el **motivo** y la **confianza**. Después usted marca cada resultado como **✓ correcto** o **✗ incorrecto**.
+Sitio del proyecto *Monitoreo inteligente para comunidades sostenibles* (Guía 02 del curso Vibe Coding CEDIA 2026, niveles 3 y 4).
+
+| Página | Para quién | Qué hace |
+|---|---|---|
+| **Reportar** (`index.html`) | Ciudadanía, sin cuenta | Consentimiento → edad → reporte → revisión. Al adjuntar una foto, la IA sugiere una descripción o avisa que no representa el problema. Se guarda en Supabase. |
+| **Validar imagen** (`validar.html`, `historial.html`) | Equipo investigador | Clasifica una imagen contra una subcategoría (relacionada, observabilidad, descripción, motivo) y permite marcar ✓/✗. |
+| **Administración** (`admin.html`) | Administradores | Lista de reportes con foto, mapa, resultado de la IA, estado y exportación CSV. |
+| Proyecto, Investigadores, Contacto | Público | Información del proyecto. |
 
 ```
-docs/                          página web (GitHub Pages)
-  index.html                   analizar una imagen
-  revision.html                historial y revisión (pendientes primero)
-  js/config.js                 URL y clave pública de Supabase  ← editar
+docs/                                  sitio web (GitHub Pages)
+  js/config.js                         URL y clave pública de Supabase
 supabase/
-  migrations/                  esquema, seguridad (RLS), bucket y catálogo ISO 37120
-  functions/analizar-imagen/   Edge Function que llama a Claude
-    index.ts                   archivo único; al inicio, el MÉTODO (prompt + esquema + modelo)
-metodo/regla_clasificacion.md  la regla explicada, con registro de cambios
+  migrations/                          1) esquema de validación y catálogo ISO 37120
+  sql/02_formulario_reportes.sql       2) base del formulario ciudadano
+  functions/analizar-imagen/           función de «Validar imagen» (equipo)
+  functions/sugerir-descripcion/       función del formulario (pública, con límites)
+metodo/regla_clasificacion.md          la regla de clasificación explicada
 ```
 
 ## Puesta en marcha
 
-Siga **[PASO_A_PASO.md](PASO_A_PASO.md)**: todo desde el navegador, sin consola: explica cada clic desde crear el proyecto hasta la primera prueba.
+Siga **[PASO_A_PASO.md](PASO_A_PASO.md)**, todo desde el navegador y sin consola. La **Parte A** pone en marcha «Validar imagen»; la **Parte B**, el formulario ciudadano.
 
 ## Probar
 1. Ingrese con su correo y contraseña.

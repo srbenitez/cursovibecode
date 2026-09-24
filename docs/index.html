@@ -3,41 +3,297 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Analizar imagen · ISO 37120</title>
-  <link rel="stylesheet" href="estilo.css">
+  <meta name="description" content="Instrumento digital de reporte ciudadano para el proyecto de Ciencia Ciudadana de la UTPL.">
+  <meta name="theme-color" content="#00529c">
+  <title>Reporte ciudadano | Ciencia Ciudadana UTPL</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2300529c'/%3E%3Cpath d='M15 17h34v9H37v24H27V26H15z' fill='%23f5b400'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header>
-    <h1>Problemas comunitarios · ISO 37120</h1>
-    <nav>
-      <a href="index.html" aria-current="page">Analizar</a>
-      <a href="revision.html">Historial y revisión</a>
-      <span id="usuario"></span>
+  <a class="skip-link" href="#main">Saltar al contenido</a>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="Universidad Técnica Particular de Loja, ir al inicio">
+      <span class="brand-mark" aria-hidden="true">UTPL</span>
+      <span class="brand-name">Universidad Técnica<br>Particular de Loja</span>
+    </a>
+    <nav class="main-nav" aria-label="Navegación principal">
+      <a class="active" aria-current="page" href="index.html">Reportar</a>
+      <a class="nav-destacado" href="validar.html">Validar imagen</a>
+      <a href="proyecto.html">Proyecto</a>
+      <a href="investigadores.html">Investigadores</a>
+      <a href="contacto.html">Contacto</a>
     </nav>
   </header>
 
-  <main id="app">
-    <section class="panel">
-      <h2 style="margin-top:0">Analizar una imagen</h2>
-      <form id="form-analisis">
-        <label for="categoria">Categoría</label>
-        <select id="categoria" required><option value="">Cargando…</option></select>
+  <main id="main" class="shell">
+    <section class="intro" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">Ciencia Ciudadana · ISO 37120</p>
+        <h1 id="page-title">Reporte ciudadano</h1>
+        <p>Registre un problema de su comunidad. Si adjunta una fotografía, una inteligencia artificial le sugerirá una descripción y le avisará si la foto no parece mostrar el problema.</p>
+      </div>
+      <div class="local-badge" role="note">
+        <span class="lock" aria-hidden="true">●</span>
+        <div><strong>Envío protegido</strong><span>Las respuestas se guardan en la base de datos del proyecto; solo el equipo investigador puede verlas.</span></div>
+      </div>
+    </section>
 
-        <label for="subcategoria">Subcategoría</label>
-        <select id="subcategoria" required disabled><option value="">Elija primero la categoría</option></select>
+    <nav class="steps" aria-label="Progreso del formulario">
+      <ol>
+        <li class="active" data-step-indicator="1"><span>1</span><em>Consentimiento</em></li>
+        <li data-step-indicator="2"><span>2</span><em>Mayoría de edad</em></li>
+        <li data-step-indicator="3"><span>3</span><em>Reporte</em></li>
+        <li data-step-indicator="4"><span>4</span><em>Revisión</em></li>
+      </ol>
+    </nav>
 
-        <label for="archivo">Imagen (JPG o PNG)</label>
-        <input id="archivo" type="file" accept="image/jpeg,image/png,image/webp" required>
-        <img id="vista-previa" class="vista-previa" alt="" hidden>
+    <div id="status" class="status" role="status" aria-live="polite"></div>
 
-        <div class="fila-botones"><button id="enviar" class="primario">Enviar y analizar</button></div>
-        <p class="mensaje" id="msg"></p>
+    <!-- Paso 1 · Consentimiento -->
+    <section class="panel step-panel active" id="step-1" data-step="1" aria-labelledby="consent-title">
+      <div class="panel-heading">
+        <p class="step-kicker">Paso 1 de 4</p>
+        <h2 id="consent-title">Consentimiento informado digital</h2>
+        <p>Lea la información antes de decidir si desea participar.</p>
+      </div>
+      <div class="consent-text" tabindex="0">
+        <p>Se le invita a participar en el estudio <strong>“Monitoreo inteligente para comunidades sostenibles basado en la metodología Citizen Science”</strong>, desarrollado por la Universidad Técnica Particular de Loja, bajo la responsabilidad del Mgtr. Segundo Raymundo Benítez Hurtado.</p>
+        <p>El propósito del estudio es recopilar y analizar reportes ciudadanos sobre problemáticas comunitarias para apoyar el monitoreo de comunidades sostenibles. Su participación consiste en responder un formulario digital sobre un problema de su comunidad. El formulario recopilará información georreferenciada del lugar del problema y, de forma opcional, podrá adjuntar una fotografía como evidencia.</p>
+        <p><strong>Uso de inteligencia artificial.</strong> Si adjunta una fotografía, esta se enviará a un servicio de inteligencia artificial (Claude, de la empresa Anthropic) para sugerirle una descripción y verificar si corresponde al problema elegido. La sugerencia es opcional: usted decide si la usa. La fotografía solo se guarda en el proyecto si usted envía el reporte.</p>
+        <p>Su participación es voluntaria, no implica costos ni compensación económica. Puede retirarse antes de enviar el formulario sin ningún perjuicio. Los datos serán tratados de forma confidencial y utilizados únicamente con fines académicos y científicos. No se publicarán datos personales, coordenadas exactas sensibles ni evidencias que permitan identificar personas, viviendas o placas. Las evidencias identificables serán eliminadas o excluidas antes del análisis. Los datos anonimizados se conservarán hasta septiembre de 2027.</p>
+        <p>Declaro que he leído y comprendido esta información. Al seleccionar <strong>“Acepto participar”</strong>, manifiesto mi consentimiento libre, informado y expreso para participar en este estudio. Esta aceptación electrónica reemplaza mi firma física conforme a la Ley de Comercio Electrónico, Firmas y Mensajes de Datos del Ecuador.</p>
+        <p>Consulte la <a href="https://www.utpl.edu.ec/privacidad" target="_blank" rel="noopener noreferrer">Política de Privacidad de la UTPL</a>.</p>
+        <p>Contacto del investigador: <a href="mailto:srbenitez@utpl.edu.ec">srbenitez@utpl.edu.ec</a>.</p>
+        <p>Contacto CEISH-UTPL: <a href="mailto:ceish@utpl.edu.ec">ceish@utpl.edu.ec</a> · Tel. 3701444 Ext. 3180.</p>
+      </div>
+      <fieldset class="decision-box">
+        <legend>Seleccione una opción para continuar</legend>
+        <label class="decision-option">
+          <input type="radio" name="consent" value="accept">
+          <span><strong>Acepto participar</strong><small>Continuar a la verificación de edad.</small></span>
+        </label>
+        <label class="decision-option">
+          <input type="radio" name="consent" value="decline">
+          <span><strong>No acepto participar</strong><small>Finalizar sin acceder al cuestionario.</small></span>
+        </label>
+      </fieldset>
+      <div class="actions actions-end">
+        <button class="button primary" id="consent-next" type="button">Confirmar decisión</button>
+      </div>
+    </section>
+
+    <!-- Paso 2 · Mayoría de edad -->
+    <section class="panel step-panel" id="step-2" data-step="2" aria-labelledby="age-title" hidden>
+      <div class="panel-heading compact">
+        <p class="step-kicker">Paso 2 de 4</p>
+        <h2 id="age-title">Verificación de mayoría de edad</h2>
+        <p>Esta comprobación es obligatoria para acceder al cuestionario.</p>
+      </div>
+      <fieldset class="decision-box narrow">
+        <legend>¿Tiene usted 18 años o más?</legend>
+        <label class="decision-option">
+          <input type="radio" name="adult" value="yes">
+          <span><strong>Sí, tengo 18 años o más</strong></span>
+        </label>
+        <label class="decision-option">
+          <input type="radio" name="adult" value="no">
+          <span><strong>No, soy menor de 18 años</strong></span>
+        </label>
+      </fieldset>
+      <div class="actions">
+        <button class="button secondary" type="button" data-back="1">Volver</button>
+        <button class="button primary" id="age-next" type="button">Continuar</button>
+      </div>
+    </section>
+
+    <!-- Paso 3 · Reporte -->
+    <section class="panel step-panel" id="step-3" data-step="3" aria-labelledby="report-title" hidden>
+      <div class="panel-heading compact">
+        <p class="step-kicker">Paso 3 de 4</p>
+        <h2 id="report-title">Problemática comunitaria</h2>
+        <p>Los campos marcados con * son obligatorios. La imagen y la descripción son opcionales.</p>
+      </div>
+
+      <form id="report-form" novalidate>
+        <div class="form-section">
+          <div class="section-title"><span>01</span><div><h3>Clasificación</h3><p>Indique qué sucede y con qué frecuencia.</p></div></div>
+          <div class="form-grid two">
+            <div class="field">
+              <label for="category">Categoría del problema (ISO 37120) *</label>
+              <select id="category" name="category" required>
+                <option value="">Cargando categorías…</option>
+              </select>
+              <span class="error" id="category-error"></span>
+            </div>
+            <div class="field">
+              <label for="subcategory">Subcategoría *</label>
+              <select id="subcategory" name="subcategory" required disabled>
+                <option value="">Seleccione primero la categoría</option>
+              </select>
+              <span class="error" id="subcategory-error"></span>
+            </div>
+          </div>
+          <div class="form-grid two">
+            <fieldset class="field radio-field">
+              <legend>Nivel de gravedad *</legend>
+              <div class="segmented">
+                <label><input type="radio" name="severity" value="1"><span>1 · Leve</span></label>
+                <label><input type="radio" name="severity" value="2"><span>2 · Moderado</span></label>
+                <label><input type="radio" name="severity" value="3"><span>3 · Urgente</span></label>
+              </div>
+              <span class="error" id="severity-error"></span>
+            </fieldset>
+            <div class="field">
+              <label for="frequency">Frecuencia del problema *</label>
+              <select id="frequency" name="frequency" required>
+                <option value="">Seleccione una opción</option>
+                <option value="Primera vez">Primera vez</option>
+                <option value="Ocurre a veces">Ocurre a veces</option>
+                <option value="Es constante">Es constante</option>
+              </select>
+              <span class="error" id="frequency-error"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section location-section">
+          <div class="section-title"><span>02</span><div><h3>Ubicación del problema</h3><p>Registre el lugar donde ocurre la situación, no necesariamente su ubicación actual.</p></div></div>
+          <div class="location-note" role="note">
+            <strong>Usted conserva el control de la ubicación.</strong>
+            <span>Puede obtener las coordenadas actuales como punto inicial y modificarlas antes de continuar.</span>
+          </div>
+          <div class="location-layout">
+            <div class="coordinate-card">
+              <div class="form-grid two">
+                <div class="field">
+                  <label for="latitude">Latitud *</label>
+                  <input id="latitude" name="latitude" type="number" step="any" min="-90" max="90" inputmode="decimal" placeholder="Ej. -3.99313" required>
+                  <span class="error" id="latitude-error"></span>
+                </div>
+                <div class="field">
+                  <label for="longitude">Longitud *</label>
+                  <input id="longitude" name="longitude" type="number" step="any" min="-180" max="180" inputmode="decimal" placeholder="Ej. -79.20422" required>
+                  <span class="error" id="longitude-error"></span>
+                </div>
+              </div>
+              <button class="button location-button" id="get-location" type="button">Usar mi ubicación actual como referencia</button>
+              <p class="microcopy" id="location-message">El navegador solicitará permiso. Las coordenadas permanecerán en este dispositivo hasta que envíe el reporte.</p>
+            </div>
+            <div class="location-visual" aria-hidden="true">
+              <div class="grid-lines"></div>
+              <div class="pin"><span></span></div>
+              <p>Lugar del problema</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="section-title"><span>03</span><div><h3>Evidencia y descripción</h3><p>Adjunte una foto del problema: la IA le sugerirá una descripción.</p></div></div>
+          <div class="field upload-field">
+            <label for="evidence">Imagen de evidencia <span class="optional">Opcional</span></label>
+            <input id="evidence" name="evidence" type="file" accept="image/jpeg,image/png,image/webp">
+            <label class="upload-box" for="evidence">
+              <span class="upload-icon" aria-hidden="true">＋</span>
+              <strong>Seleccionar fotografía</strong>
+              <small>JPG, PNG o WebP. Evite rostros, placas y viviendas identificables. La foto se reduce y se le quitan los datos de ubicación antes de salir de su dispositivo.</small>
+            </label>
+            <span class="error" id="evidence-error"></span>
+            <div id="file-preview" class="file-preview" hidden></div>
+            <div id="ia-box" class="ia-box" role="status" aria-live="polite" hidden></div>
+          </div>
+          <div class="field">
+            <div class="label-row"><label for="comment">Descripción del problema <span class="optional">Opcional</span></label><span id="comment-count">0/300</span></div>
+            <textarea id="comment" name="comment" maxlength="300" rows="4" placeholder="Describa qué ocurre, desde cuándo y cómo afecta al sector."></textarea>
+            <span class="error" id="comment-error"></span>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="section-title"><span>04</span><div><h3>Contexto del reporte</h3><p>Responda sin proporcionar nombres, correo ni otros identificadores.</p></div></div>
+          <div class="form-grid two">
+            <fieldset class="field radio-field">
+              <legend>¿El problema le afecta personalmente? *</legend>
+              <div class="segmented two-options">
+                <label><input type="radio" name="affected" value="Sí"><span>Sí</span></label>
+                <label><input type="radio" name="affected" value="No"><span>No</span></label>
+              </div>
+              <span class="error" id="affected-error"></span>
+            </fieldset>
+            <div class="field" id="impact-field" hidden>
+              <label for="impact">¿Cómo le afecta? *</label>
+              <input id="impact" name="impact" type="text" maxlength="160" placeholder="Explique brevemente el impacto">
+              <span class="error" id="impact-error"></span>
+            </div>
+          </div>
+          <div class="form-grid two">
+            <div class="field">
+              <label for="age-range">Rango de edad *</label>
+              <select id="age-range" name="ageRange" required>
+                <option value="">Seleccione un rango</option>
+                <option>18–24</option><option>25–34</option><option>35–49</option><option>50–64</option><option>65+</option>
+              </select>
+              <span class="error" id="age-range-error"></span>
+            </div>
+            <fieldset class="field checkbox-field">
+              <legend>Rol o vínculo con el territorio *</legend>
+              <div class="check-grid">
+                <label><input type="checkbox" name="roles" value="Residente"><span>Residente</span></label>
+                <label><input type="checkbox" name="roles" value="Comerciante"><span>Comerciante</span></label>
+                <label><input type="checkbox" name="roles" value="Visitante"><span>Visitante</span></label>
+                <label><input type="checkbox" name="roles" value="Estudiante"><span>Estudiante</span></label>
+                <label><input type="checkbox" name="roles" value="Otro"><span>Otro</span></label>
+              </div>
+              <span class="error" id="roles-error"></span>
+            </fieldset>
+          </div>
+        </div>
+
+        <div class="form-footer">
+          <div class="privacy-reminder"><strong>Revisión previa</strong><span>Los datos se enviarán únicamente después de su confirmación.</span></div>
+          <div class="actions">
+            <button class="button secondary" type="button" data-back="2">Volver</button>
+            <button class="button primary" type="submit">Revisar reporte</button>
+          </div>
+        </div>
       </form>
     </section>
 
-    <section id="resultado"></section>
+    <!-- Paso 4 · Revisión -->
+    <section class="panel step-panel" id="step-4" data-step="4" aria-labelledby="review-title" hidden>
+      <div class="panel-heading compact review-heading">
+        <div>
+          <p class="step-kicker">Paso 4 de 4</p>
+          <h2 id="review-title">Revisión del reporte</h2>
+          <p>Compruebe la información antes de enviarla al equipo investigador.</p>
+        </div>
+        <span class="not-sent">No enviado</span>
+      </div>
+      <div id="report-summary" class="summary-grid"></div>
+      <div id="map-preview" class="map-preview" aria-label="Mapa de la ubicación reportada"></div>
+      <div class="prototype-warning" role="note">
+        <strong>Confirmación necesaria</strong>
+        <span>Al seleccionar “Enviar reporte”, la información y la imagen opcional se almacenarán en el proyecto de investigación. Este formulario no sustituye los canales de emergencia.</span>
+      </div>
+      <div class="actions review-actions">
+        <button class="button secondary" type="button" data-back="3">Editar reporte</button>
+        <button class="button secondary" id="reset-form" type="button">Reiniciar</button>
+        <button class="button primary" id="submit-report" type="button">Enviar reporte</button>
+      </div>
+    </section>
+
+    <section class="panel end-panel" id="end-panel" hidden aria-labelledby="end-title">
+      <div class="end-symbol" aria-hidden="true">✓</div>
+      <p class="eyebrow">Proceso finalizado</p>
+      <h2 id="end-title" tabindex="-1">Gracias por su participación</h2>
+      <p id="end-message">Su decisión ha sido respetada. No se habilitó el cuestionario ni se guardó información.</p>
+      <button class="button secondary" id="start-over" type="button">Volver al inicio</button>
+    </section>
   </main>
 
-  <script type="module" src="js/analizar.js"></script>
+  <footer>
+    <span>Universidad Técnica Particular de Loja</span>
+    <span><a href="admin.html">Administración</a> · Ciencia Ciudadana · ISO 37120</span>
+  </footer>
+  <script type="module" src="js/reporte.js"></script>
 </body>
 </html>

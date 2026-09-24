@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#00529c">
+  <title>Administración de reportes | Ciencia Ciudadana UTPL</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2300529c'/%3E%3Cpath d='M15 17h34v9H37v24H27V26H15z' fill='%23f5b400'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Saltar al contenido</a>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="Universidad Técnica Particular de Loja, ir al inicio">
+      <span class="brand-mark" aria-hidden="true">UTPL</span>
+      <span class="brand-name">Universidad Técnica<br>Particular de Loja</span>
+    </a>
+    <nav class="main-nav" aria-label="Navegación principal">
+      <a href="index.html">Reportar</a>
+      <a class="nav-destacado" href="validar.html">Validar imagen</a>
+      <a href="proyecto.html">Proyecto</a>
+      <a href="investigadores.html">Investigadores</a>
+      <a href="contacto.html">Contacto</a>
+    </nav>
+  </header>
+
+  <main id="main" class="content-shell admin-shell">
+    <section class="page-hero admin-hero">
+      <p class="eyebrow">Acceso restringido</p>
+      <h1>Administración de reportes</h1>
+      <p>Consulta, revisión y exportación de los reportes ciudadanos, con el resultado de la revisión automática de la imagen.</p>
+      <div class="usuario" id="usuario"></div>
+    </section>
+
+    <div id="admin-status" class="status" role="status" aria-live="polite"></div>
+
+    <div id="app">
+      <section id="dashboard-panel">
+        <div class="admin-toolbar">
+          <div><strong id="record-count">0 reportes</strong><span>Solo visibles para los correos registrados como administradores.</span></div>
+          <div class="admin-toolbar-actions">
+            <button class="button secondary" id="refresh-reports" type="button">Actualizar</button>
+            <button class="button secondary" id="export-csv" type="button">Exportar CSV</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="reports-table">
+            <thead><tr><th>Fecha</th><th>Categoría</th><th>Gravedad</th><th>Imagen / IA</th><th>Estado</th><th>Acciones</th></tr></thead>
+            <tbody id="reports-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="report-detail" class="admin-card report-detail" hidden aria-labelledby="detail-title">
+        <div class="detail-heading"><h2 id="detail-title">Detalle del reporte</h2><button class="button secondary" id="close-detail" type="button">Cerrar</button></div>
+        <div id="detail-content" class="detail-grid"></div>
+        <div id="admin-map" class="map-preview"></div>
+        <div id="admin-image" class="admin-image"></div>
+      </section>
+    </div>
+  </main>
+
+  <footer><span>Universidad Técnica Particular de Loja</span><span>Acceso protegido por autenticación y políticas RLS</span></footer>
+  <script type="module" src="js/admin.js"></script>
+</body>
+</html>

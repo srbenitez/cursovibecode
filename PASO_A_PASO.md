@@ -1,9 +1,11 @@
-# Paso a paso: poner en marcha el clasificador ISO 37120 (todo desde el navegador)
+# Paso a paso: poner en marcha el sitio Ciencia Ciudadana ISO 37120 (todo desde el navegador)
 
 **No necesita consola ni instalar nada.** Todo se hace en tres sitios web: la consola de Anthropic, el panel de Supabase y GitHub.
 **Tiempo estimado:** 30 a 45 minutos. **Costo:** Supabase y GitHub Pages, gratis. Claude, alrededor de US$ 0,01 a 0,02 por imagen (estimado).
 
 > **Regla de oro:** la **API key de Anthropic** (`sk-ant-…`) no se pega en ningún chat, correo ni archivo del repositorio. Solo va en el Paso 6.
+
+**Parte A · Validar imagen**
 
 | # | Paso | Dónde |
 |---|---|---|
@@ -148,3 +150,46 @@ También puede verlo en console.anthropic.com → **Usage**.
 | GitHub Pages da 404 | Carpeta equivocada o aún publicando | Paso 11: carpeta `/docs`; espere 3 minutos |
 
 Si algo no se resuelve, copie el mensaje de error exacto (sin claves) y compártalo en esta conversación. Para ver los errores internos de la función: panel → **Edge Functions** → `analizar-imagen` → **Logs**.
+
+---
+
+# Parte B · Formulario ciudadano con revisión de imagen por IA
+
+La página **Reportar** (`index.html`) es el formulario público: consentimiento, mayoría de edad, reporte y revisión. Cuando la persona adjunta una foto, la IA le sugiere una descripción o le avisa que la imagen no representa el problema, **antes de enviar**. Los reportes se guardan en Supabase y se consultan en **Administración** (`admin.html`).
+
+## Paso B1 · Crear la base del formulario
+1. Abra en GitHub **`supabase/sql/02_formulario_reportes.sql`** y presione **Copy raw file** (el ícono de dos hojas).
+2. Supabase → **SQL Editor → New query** → pegue → **Run**.
+3. Al final debe aparecer una fila con `reportes = 0`, `bucket = 1` y `administradores = 1`.
+
+> Requiere que antes se hayan ejecutado los dos archivos de `supabase/migrations/` (Paso 2). Se puede volver a ejecutar sin perder datos.
+
+## Paso B2 · Crear la función que revisa la foto del formulario
+Igual que en el Paso 5, pero con otro archivo y otro nombre:
+1. En GitHub abra **`supabase/functions/sugerir-descripcion/index.ts`** → **Copy raw file**.
+2. Supabase → **Edge Functions → Deploy a new function → Via Editor** → borre el ejemplo → pegue.
+3. Nombre de la función: **`sugerir-descripcion`** (exactamente así) → **Deploy function**.
+4. Usa el mismo secreto `ANTHROPIC_API_KEY` del Paso 6; no hay que crearlo otra vez.
+
+> **Verify JWT** puede quedar activado, porque su página usa la clave `anon` que empieza con `eyJ…`. Si algún día cambia a una clave `sb_publishable_…`, desactive **Verify JWT** en esta función (solo en esta).
+
+## Paso B3 · Administradores
+El script registra **srbenitez@gmail.com** como administrador. Para entrar a **Administración**:
+- El usuario creado en el Paso 7 debe tener **ese mismo correo**.
+- Para agregar a otra persona: primero créela en **Authentication → Users** (Paso 7). Luego, en el **SQL Editor**:
+  ```sql
+  insert into administradores (email) values ('otra.persona@utpl.edu.ec');
+  ```
+
+## Paso B4 · Probar el formulario
+1. Abra `https://srbenitez.github.io/cursovibecode/` en una **ventana privada**, para probar como un ciudadano sin sesión.
+2. Acepte el consentimiento, confirme la edad y elija **Residuos sólidos → Acumulación de basura**.
+3. Adjunte una foto de basura. En unos segundos aparece un recuadro **verde** con la descripción sugerida → **Usar esta descripción**.
+4. Cambie la subcategoría a **Transporte → Falta de ciclovías**: el recuadro debe ponerse **rojo** y decir que la imagen no representa el problema.
+5. Complete el resto, revise y **Enviar reporte**.
+6. En su navegador normal, entre a **Administración**: debe ver el reporte con la foto, el mapa y el resultado de la IA.
+
+## Límites y costo del formulario
+- Cada revisión de foto cuesta alrededor de **US$ 0,005 a 0,01** (foto reducida a 1092 px, Sonnet 5). Es una estimación.
+- Para cuidar el crédito, la función acepta **20 revisiones por hora por conexión** y **500 por día en total**; cada visitante puede pedir hasta 6 por visita. Se cambian al inicio de `sugerir-descripcion/index.ts`.
+- Si se alcanza un límite, la persona igual puede enviar el reporte, solo que sin sugerencia.

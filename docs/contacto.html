@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Página de contacto del prototipo de reporte ciudadano UTPL.">
+  <meta name="theme-color" content="#00529c"><title>Contacto | Ciencia Ciudadana UTPL</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2300529c'/%3E%3Cpath d='M15 17h34v9H37v24H27V26H15z' fill='%23f5b400'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Saltar al contenido</a>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="Universidad Técnica Particular de Loja, ir al inicio"><span class="brand-mark" aria-hidden="true">UTPL</span><span class="brand-name">Universidad Técnica<br>Particular de Loja</span></a>
+    <nav class="main-nav" aria-label="Navegación principal">
+      <a href="index.html">Reportar</a>
+      <a class="nav-destacado" href="validar.html">Validar imagen</a>
+      <a href="proyecto.html">Proyecto</a>
+      <a href="investigadores.html">Investigadores</a>
+      <a class="active" aria-current="page" href="contacto.html">Contacto</a>
+    </nav>
+  </header>
+  <main id="main" class="content-shell">
+    <section class="page-hero"><p class="eyebrow">Consultas sobre el proyecto</p><h1>Contacto</h1><p>Este espacio permitirá enviar preguntas al equipo investigador cuando el canal institucional se encuentre habilitado.</p></section>
+    <div class="contact-layout">
+      <aside class="contact-note"><h2>Canal en preparación</h2><p>El formulario se presenta únicamente como parte del prototipo. En esta versión no recopila, almacena ni transmite nombres, correos o mensajes.</p><div class="contact-status">Formulario temporalmente inactivo</div></aside>
+      <section class="contact-form-card" aria-labelledby="contact-form-title"><h2 id="contact-form-title">Escriba su consulta</h2>
+        <form class="inactive-form" aria-describedby="contact-disabled-note">
+          <div><label for="contact-name">Nombre</label><input id="contact-name" type="text" placeholder="Su nombre" disabled></div>
+          <div><label for="contact-email">Correo electrónico</label><input id="contact-email" type="email" placeholder="nombre@ejemplo.com" disabled></div>
+          <div><label for="contact-subject">Asunto</label><input id="contact-subject" type="text" placeholder="Motivo de la consulta" disabled></div>
+          <div><label for="contact-message">Mensaje</label><textarea id="contact-message" rows="5" placeholder="Escriba su pregunta" disabled></textarea></div>
+          <p id="contact-disabled-note" class="microcopy">El botón permanecerá desactivado hasta definir y autorizar el canal institucional de recepción.</p>
+          <button class="button primary" type="button" disabled>Enviar consulta</button>
+        </form>
+      </section>
+    </div>
+  </main>
+  <footer>
+    <span>Universidad Técnica Particular de Loja</span>
+    <span><a href="admin.html">Administración</a> · Ciencia Ciudadana · ISO 37120</span>
+  </footer>
+</body>
+</html>

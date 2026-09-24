@@ -1,4 +1,4 @@
-import { analizar, esc, exigirSesion, pintarResultado, supabase } from "./comun.js";
+import { analizar, esc, exigirSesion, huella, nuevoId, pintarResultado, reducirImagen, supabase } from "./comun.js";
 
 // Tamaño fijo de la imagen enviada al modelo (lado mayor, en píxeles).
 // Forma parte del método: cambiarlo puede cambiar los resultados.
@@ -49,7 +49,7 @@ exigirSesion(app, async (usuario) => {
     msg.className = "mensaje";
     try {
       msg.textContent = "Preparando la imagen…";
-      const { blob, ancho, alto } = await reducirImagen(archivo.files[0]);
+      const { blob, ancho, alto } = await reducirImagen(archivo.files[0], LADO_MAYOR);
       const sha256 = await huella(blob);
 
       // Si la misma foto ya se subió, se reutiliza (y se analiza de nuevo con esta subcategoría)
@@ -58,7 +58,7 @@ exigirSesion(app, async (usuario) => {
 
       if (!imagen) {
         msg.textContent = "Subiendo…";
-        const id = crypto.randomUUID();
+        const id = nuevoId();
         const ruta = `${usuario.id}/${id}.jpg`;
         const subida = await supabase.storage.from("imagenes")
           .upload(ruta, blob, { contentType: "image/jpeg" });
@@ -84,22 +84,3 @@ exigirSesion(app, async (usuario) => {
     }
   };
 });
-
-// Reduce al lado mayor fijo y re-codifica en JPEG (esto también elimina el EXIF, incluido el GPS).
-async function reducirImagen(file) {
-  const bmp = await createImageBitmap(file, { imageOrientation: "from-image" });
-  const escala = Math.min(1, LADO_MAYOR / Math.max(bmp.width, bmp.height));
-  const ancho = Math.round(bmp.width * escala);
-  const alto = Math.round(bmp.height * escala);
-  const lienzo = document.createElement("canvas");
-  lienzo.width = ancho;
-  lienzo.height = alto;
-  lienzo.getContext("2d").drawImage(bmp, 0, 0, ancho, alto);
-  const blob = await new Promise((ok) => lienzo.toBlob(ok, "image/jpeg", 0.88));
-  return { blob, ancho, alto };
-}
-
-async function huella(blob) {
-  const hash = await crypto.subtle.digest("SHA-256", await blob.arrayBuffer());
-  return [...new Uint8Array(hash)].map((b) => b.toString(16).padStart(2, "0")).join("");
-}

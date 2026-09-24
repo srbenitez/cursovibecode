@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#00529c">
+  <title>Validar imagen | Ciencia Ciudadana UTPL</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2300529c'/%3E%3Cpath d='M15 17h34v9H37v24H27V26H15z' fill='%23f5b400'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Saltar al contenido</a>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="Universidad Técnica Particular de Loja, ir al inicio">
+      <span class="brand-mark" aria-hidden="true">UTPL</span>
+      <span class="brand-name">Universidad Técnica<br>Particular de Loja</span>
+    </a>
+    <nav class="main-nav" aria-label="Navegación principal">
+      <a href="index.html">Reportar</a>
+      <a class="active nav-destacado" aria-current="page" href="validar.html">Validar imagen</a>
+      <a href="proyecto.html">Proyecto</a>
+      <a href="investigadores.html">Investigadores</a>
+      <a href="contacto.html">Contacto</a>
+    </nav>
+  </header>
+
+  <main id="main" class="content-shell">
+    <section class="page-hero">
+      <p class="eyebrow">Equipo investigador · IA con visión</p>
+      <h1>Validar imagen</h1>
+      <p>Elija la categoría ISO 37120 y la subcategoría, suba una fotografía y obtenga si la imagen está relacionada, una descripción de lo observable y el motivo. Después marque si el resultado es correcto.</p>
+      <div class="usuario" id="usuario"></div>
+    </section>
+    <nav class="subnav" aria-label="Secciones de validación">
+      <a href="validar.html" aria-current="page">Analizar una imagen</a>
+      <a href="historial.html">Historial y revisión</a>
+    </nav>
+
+    <div id="app">
+      <section class="admin-card">
+        <h2>Analizar una imagen</h2>
+        <form id="form-analisis">
+          <div class="form-grid two">
+            <div class="field">
+              <label for="categoria">Categoría ISO 37120 *</label>
+              <select id="categoria" required><option value="">Cargando…</option></select>
+            </div>
+            <div class="field">
+              <label for="subcategoria">Subcategoría *</label>
+              <select id="subcategoria" required disabled><option value="">Elija primero la categoría</option></select>
+            </div>
+          </div>
+          <div class="field">
+            <label for="archivo">Imagen (JPG, PNG o WebP) *</label>
+            <input id="archivo" type="file" accept="image/jpeg,image/png,image/webp" required>
+            <img id="vista-previa" class="vista-previa" alt="" hidden>
+          </div>
+          <div class="fila-botones"><button id="enviar" class="button primary">Enviar y analizar</button></div>
+          <p class="mensaje" id="msg"></p>
+        </form>
+      </section>
+      <section id="resultado"></section>
+    </div>
+  </main>
+
+  <footer>
+    <span>Universidad Técnica Particular de Loja</span>
+    <span><a href="admin.html">Administración</a> · Ciencia Ciudadana · ISO 37120</span>
+  </footer>
+  <script type="module" src="js/analizar.js"></script>
+</body>
+</html>

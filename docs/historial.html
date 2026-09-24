@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#00529c">
+  <title>Historial de validación | Ciencia Ciudadana UTPL</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2300529c'/%3E%3Cpath d='M15 17h34v9H37v24H27V26H15z' fill='%23f5b400'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Saltar al contenido</a>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="Universidad Técnica Particular de Loja, ir al inicio">
+      <span class="brand-mark" aria-hidden="true">UTPL</span>
+      <span class="brand-name">Universidad Técnica<br>Particular de Loja</span>
+    </a>
+    <nav class="main-nav" aria-label="Navegación principal">
+      <a href="index.html">Reportar</a>
+      <a class="active nav-destacado" aria-current="page" href="validar.html">Validar imagen</a>
+      <a href="proyecto.html">Proyecto</a>
+      <a href="investigadores.html">Investigadores</a>
+      <a href="contacto.html">Contacto</a>
+    </nav>
+  </header>
+
+  <main id="main" class="content-shell">
+    <section class="page-hero">
+      <p class="eyebrow">Equipo investigador · IA con visión</p>
+      <h1>Historial y revisión</h1>
+      <p>Todos los análisis, con su revisión humana. Los pendientes de confianza baja aparecen primero.</p>
+      <div class="usuario" id="usuario"></div>
+    </section>
+    <nav class="subnav" aria-label="Secciones de validación">
+      <a href="validar.html">Analizar una imagen</a>
+      <a href="historial.html" aria-current="page">Historial y revisión</a>
+    </nav>
+
+    <div id="app">
+      <section class="admin-card">
+        <div class="filtros">
+          <strong>Mostrar:</strong>
+          <button class="button secondary" data-filtro="pendientes" aria-pressed="true">Pendientes de revisar</button>
+          <button class="button secondary" data-filtro="incorrectos" aria-pressed="false">Marcados incorrectos</button>
+          <button class="button secondary" data-filtro="todos" aria-pressed="false">Todos</button>
+        </div>
+        <p class="mensaje" id="resumen"></p>
+      </section>
+      <div id="lista"></div>
+    </div>
+  </main>
+
+  <footer>
+    <span>Universidad Técnica Particular de Loja</span>
+    <span><a href="admin.html">Administración</a> · Ciencia Ciudadana · ISO 37120</span>
+  </footer>
+  <script type="module" src="js/revision.js"></script>
+</body>
+</html>
