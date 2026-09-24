@@ -385,3 +385,38 @@ footer a { color: var(--blue); font-weight: 800; }
 @media (max-width: 780px) {
   .resultado, .correccion { grid-template-columns: 1fr; }
 }
+
+/* ═══════════════ Formulario en una sola página: mapa y ventana de revisión IA ═══════════════ */
+.consent-compacto { margin: 0 0 16px; max-height: 220px; }
+.check-grid.consentimiento { grid-template-columns: repeat(2, 1fr); }
+.check-grid.consentimiento label { padding: 12px 14px; }
+.mapa { height: 360px; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; z-index: 0; }
+.mapa-controles { margin-top: 14px; display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: end; }
+.mapa-controles .location-button { width: auto; }
+.mapa-controles .coordenadas { margin: 0; }
+.dialogo { width: min(560px, calc(100% - 24px)); max-height: calc(100dvh - 24px); padding: 26px; border: 0; border-radius: 16px; box-shadow: 0 24px 60px rgba(5, 51, 89, .3); color: var(--ink); }
+.dialogo::backdrop { background: rgba(6, 55, 96, .45); }
+.dialogo h2 { margin: 0 0 12px; color: var(--blue-dark); font-size: 1.3rem; line-height: 1.25; }
+.dialogo h2.ok { color: var(--success); }
+.dialogo h2.mal { color: var(--danger); }
+.dialogo p { margin: 8px 0 0; color: #334653; }
+.dialogo blockquote { margin: 6px 0 0; padding: 10px 12px; background: var(--blue-soft); border-left: 4px solid var(--blue); border-radius: 8px; }
+.dialogo-foto img { display: block; max-width: 100%; max-height: 220px; margin: 4px 0 8px; border-radius: 10px; border: 1px solid var(--line); object-fit: contain; }
+.usar-sugerencia { display: flex; gap: 10px; align-items: flex-start; margin-top: 12px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 9px; cursor: pointer; }
+.usar-sugerencia input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--blue); }
+.dialogo .fila-botones { margin-top: 18px; }
+.file-preview .fila-botones { margin-top: 8px; }
+.file-preview .fila-botones .button { min-height: 36px; padding: 6px 12px; }
+
+/* Pestañas del historial */
+.pestanas { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 18px; border-bottom: 2px solid var(--line); }
+.pestanas button { padding: 10px 16px; border: 0; border-bottom: 3px solid transparent; margin-bottom: -2px; background: none; color: var(--muted); font: inherit; font-weight: 800; cursor: pointer; }
+.pestanas button[aria-selected="true"] { color: var(--blue); border-bottom-color: var(--blue); }
+.pestanas .contador { margin-left: 6px; padding: 1px 8px; border-radius: 999px; background: var(--yellow-soft); color: #7a5600; font-size: .75rem; }
+.miniatura { width: 72px; height: 54px; object-fit: cover; border-radius: 6px; border: 1px solid var(--line); display: block; }
+
+@media (max-width: 780px) {
+  .check-grid.consentimiento, .mapa-controles { grid-template-columns: 1fr; }
+  .mapa { height: 300px; }
+  .mapa-controles .location-button { width: 100%; }
+}

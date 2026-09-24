@@ -4,9 +4,9 @@ Sitio del proyecto *Monitoreo inteligente para comunidades sostenibles* (Guía 0
 
 | Página | Para quién | Qué hace |
 |---|---|---|
-| **Reportar** (`index.html`) | Ciudadanía, sin cuenta | Consentimiento → edad → reporte → revisión. Al adjuntar una foto, la IA sugiere una descripción o avisa que no representa el problema. Se guarda en Supabase. |
-| **Validar imagen** (`validar.html`, `historial.html`) | Equipo investigador | Clasifica una imagen contra una subcategoría (relacionada, observabilidad, descripción, motivo) y permite marcar ✓/✗. |
-| **Administración** (`admin.html`) | Administradores | Lista de reportes con foto, mapa, resultado de la IA, estado y exportación CSV. |
+| **Reportar** (`index.html`) | Ciudadanía, sin cuenta | Formulario en una sola página, con mapa para marcar el lugar. Al enviar, la IA revisa la foto y le muestra a la persona si corresponde al problema, con una descripción sugerida. Se guarda en Supabase. |
+| **Validar imagen** (`validar.html`) | Equipo investigador | Analiza una imagen contra una subcategoría y permite marcar ✓/✗. |
+| **Historial** (`historial.html`) | Administradores | Pestañas: **Imágenes enviadas** (validar lo que dijo la IA), **Encuestas enviadas** (tabla, detalle con mapa y foto, estado, CSV) y **Análisis manuales**. |
 | Proyecto, Investigadores, Contacto | Público | Información del proyecto. |
 
 ```
@@ -15,6 +15,7 @@ docs/                                  sitio web (GitHub Pages)
 supabase/
   migrations/                          1) esquema de validación y catálogo ISO 37120
   sql/02_formulario_reportes.sql       2) base del formulario ciudadano
+  sql/03_validacion_imagenes_enviadas.sql  3) validación humana de las fotos enviadas
   functions/analizar-imagen/           función de «Validar imagen» (equipo)
   functions/sugerir-descripcion/       función del formulario (pública, con límites)
 metodo/regla_clasificacion.md          la regla de clasificación explicada

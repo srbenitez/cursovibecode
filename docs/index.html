@@ -7,6 +7,7 @@
   <meta name="theme-color" content="#00529c">
   <title>Reporte ciudadano | Ciencia Ciudadana UTPL</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2300529c'/%3E%3Cpath d='M15 17h34v9H37v24H27V26H15z' fill='%23f5b400'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -30,7 +31,7 @@
       <div>
         <p class="eyebrow">Ciencia Ciudadana · ISO 37120</p>
         <h1 id="page-title">Reporte ciudadano</h1>
-        <p>Registre un problema de su comunidad. Si adjunta una fotografía, una inteligencia artificial le sugerirá una descripción y le avisará si la foto no parece mostrar el problema.</p>
+        <p>Registre un problema de su comunidad en una sola página: marque el lugar en el mapa, adjunte una foto si la tiene y envíe. Al enviar, una inteligencia artificial revisará la foto y le mostrará el resultado.</p>
       </div>
       <div class="local-badge" role="note">
         <span class="lock" aria-hidden="true">●</span>
@@ -38,83 +39,34 @@
       </div>
     </section>
 
-    <nav class="steps" aria-label="Progreso del formulario">
-      <ol>
-        <li class="active" data-step-indicator="1"><span>1</span><em>Consentimiento</em></li>
-        <li data-step-indicator="2"><span>2</span><em>Mayoría de edad</em></li>
-        <li data-step-indicator="3"><span>3</span><em>Reporte</em></li>
-        <li data-step-indicator="4"><span>4</span><em>Revisión</em></li>
-      </ol>
-    </nav>
-
     <div id="status" class="status" role="status" aria-live="polite"></div>
 
-    <!-- Paso 1 · Consentimiento -->
-    <section class="panel step-panel active" id="step-1" data-step="1" aria-labelledby="consent-title">
-      <div class="panel-heading">
-        <p class="step-kicker">Paso 1 de 4</p>
-        <h2 id="consent-title">Consentimiento informado digital</h2>
-        <p>Lea la información antes de decidir si desea participar.</p>
-      </div>
-      <div class="consent-text" tabindex="0">
-        <p>Se le invita a participar en el estudio <strong>“Monitoreo inteligente para comunidades sostenibles basado en la metodología Citizen Science”</strong>, desarrollado por la Universidad Técnica Particular de Loja, bajo la responsabilidad del Mgtr. Segundo Raymundo Benítez Hurtado.</p>
-        <p>El propósito del estudio es recopilar y analizar reportes ciudadanos sobre problemáticas comunitarias para apoyar el monitoreo de comunidades sostenibles. Su participación consiste en responder un formulario digital sobre un problema de su comunidad. El formulario recopilará información georreferenciada del lugar del problema y, de forma opcional, podrá adjuntar una fotografía como evidencia.</p>
-        <p><strong>Uso de inteligencia artificial.</strong> Si adjunta una fotografía, esta se enviará a un servicio de inteligencia artificial (Claude, de la empresa Anthropic) para sugerirle una descripción y verificar si corresponde al problema elegido. La sugerencia es opcional: usted decide si la usa. La fotografía solo se guarda en el proyecto si usted envía el reporte.</p>
-        <p>Su participación es voluntaria, no implica costos ni compensación económica. Puede retirarse antes de enviar el formulario sin ningún perjuicio. Los datos serán tratados de forma confidencial y utilizados únicamente con fines académicos y científicos. No se publicarán datos personales, coordenadas exactas sensibles ni evidencias que permitan identificar personas, viviendas o placas. Las evidencias identificables serán eliminadas o excluidas antes del análisis. Los datos anonimizados se conservarán hasta septiembre de 2027.</p>
-        <p>Declaro que he leído y comprendido esta información. Al seleccionar <strong>“Acepto participar”</strong>, manifiesto mi consentimiento libre, informado y expreso para participar en este estudio. Esta aceptación electrónica reemplaza mi firma física conforme a la Ley de Comercio Electrónico, Firmas y Mensajes de Datos del Ecuador.</p>
-        <p>Consulte la <a href="https://www.utpl.edu.ec/privacidad" target="_blank" rel="noopener noreferrer">Política de Privacidad de la UTPL</a>.</p>
-        <p>Contacto del investigador: <a href="mailto:srbenitez@utpl.edu.ec">srbenitez@utpl.edu.ec</a>.</p>
-        <p>Contacto CEISH-UTPL: <a href="mailto:ceish@utpl.edu.ec">ceish@utpl.edu.ec</a> · Tel. 3701444 Ext. 3180.</p>
-      </div>
-      <fieldset class="decision-box">
-        <legend>Seleccione una opción para continuar</legend>
-        <label class="decision-option">
-          <input type="radio" name="consent" value="accept">
-          <span><strong>Acepto participar</strong><small>Continuar a la verificación de edad.</small></span>
-        </label>
-        <label class="decision-option">
-          <input type="radio" name="consent" value="decline">
-          <span><strong>No acepto participar</strong><small>Finalizar sin acceder al cuestionario.</small></span>
-        </label>
-      </fieldset>
-      <div class="actions actions-end">
-        <button class="button primary" id="consent-next" type="button">Confirmar decisión</button>
-      </div>
-    </section>
-
-    <!-- Paso 2 · Mayoría de edad -->
-    <section class="panel step-panel" id="step-2" data-step="2" aria-labelledby="age-title" hidden>
+    <section class="panel" id="formulario" aria-labelledby="report-title">
       <div class="panel-heading compact">
-        <p class="step-kicker">Paso 2 de 4</p>
-        <h2 id="age-title">Verificación de mayoría de edad</h2>
-        <p>Esta comprobación es obligatoria para acceder al cuestionario.</p>
-      </div>
-      <fieldset class="decision-box narrow">
-        <legend>¿Tiene usted 18 años o más?</legend>
-        <label class="decision-option">
-          <input type="radio" name="adult" value="yes">
-          <span><strong>Sí, tengo 18 años o más</strong></span>
-        </label>
-        <label class="decision-option">
-          <input type="radio" name="adult" value="no">
-          <span><strong>No, soy menor de 18 años</strong></span>
-        </label>
-      </fieldset>
-      <div class="actions">
-        <button class="button secondary" type="button" data-back="1">Volver</button>
-        <button class="button primary" id="age-next" type="button">Continuar</button>
-      </div>
-    </section>
-
-    <!-- Paso 3 · Reporte -->
-    <section class="panel step-panel" id="step-3" data-step="3" aria-labelledby="report-title" hidden>
-      <div class="panel-heading compact">
-        <p class="step-kicker">Paso 3 de 4</p>
         <h2 id="report-title">Problemática comunitaria</h2>
-        <p>Los campos marcados con * son obligatorios. La imagen y la descripción son opcionales.</p>
+        <p>Los campos marcados con * son obligatorios. La foto y la descripción son opcionales.</p>
       </div>
 
       <form id="report-form" novalidate>
+        <!-- 00 · Consentimiento y edad -->
+        <div class="form-section">
+          <div class="section-title"><span>00</span><div><h3>Consentimiento informado</h3><p>Lea la información antes de participar.</p></div></div>
+          <div class="consent-text consent-compacto" tabindex="0">
+            <p>Se le invita a participar en el estudio <strong>“Monitoreo inteligente para comunidades sostenibles basado en la metodología Citizen Science”</strong>, desarrollado por la Universidad Técnica Particular de Loja, bajo la responsabilidad del Mgtr. Segundo Raymundo Benítez Hurtado.</p>
+            <p>El propósito del estudio es recopilar y analizar reportes ciudadanos sobre problemáticas comunitarias para apoyar el monitoreo de comunidades sostenibles. Su participación consiste en responder este formulario sobre un problema de su comunidad. El formulario recopilará la ubicación del problema y, de forma opcional, una fotografía como evidencia.</p>
+            <p><strong>Uso de inteligencia artificial.</strong> Si adjunta una fotografía, al enviar el formulario esta se enviará a un servicio de inteligencia artificial (Claude, de la empresa Anthropic) para verificar si corresponde al problema elegido y sugerir una descripción. Usted verá el resultado antes de confirmar el envío.</p>
+            <p>Su participación es voluntaria, no implica costos ni compensación económica. Puede retirarse antes de enviar el formulario sin ningún perjuicio. Los datos serán tratados de forma confidencial y utilizados únicamente con fines académicos y científicos. No se publicarán datos personales, coordenadas exactas sensibles ni evidencias que permitan identificar personas, viviendas o placas. Las evidencias identificables serán eliminadas o excluidas antes del análisis. Los datos anonimizados se conservarán hasta septiembre de 2027.</p>
+            <p>Al marcar <strong>“Acepto participar”</strong>, manifiesto mi consentimiento libre, informado y expreso. Esta aceptación electrónica reemplaza mi firma física conforme a la Ley de Comercio Electrónico, Firmas y Mensajes de Datos del Ecuador.</p>
+            <p>Consulte la <a href="https://www.utpl.edu.ec/privacidad" target="_blank" rel="noopener noreferrer">Política de Privacidad de la UTPL</a>. Investigador: <a href="mailto:srbenitez@utpl.edu.ec">srbenitez@utpl.edu.ec</a>. CEISH-UTPL: <a href="mailto:ceish@utpl.edu.ec">ceish@utpl.edu.ec</a> · Tel. 3701444 Ext. 3180.</p>
+          </div>
+          <div class="check-grid consentimiento">
+            <label><input type="checkbox" id="consent" name="consent"><span><strong>Acepto participar</strong> en el estudio *</span></label>
+            <label><input type="checkbox" id="adult" name="adult"><span><strong>Tengo 18 años o más</strong> *</span></label>
+          </div>
+          <span class="error" id="consent-error"></span>
+        </div>
+
+        <!-- 01 · Clasificación -->
         <div class="form-section">
           <div class="section-title"><span>01</span><div><h3>Clasificación</h3><p>Indique qué sucede y con qué frecuencia.</p></div></div>
           <div class="form-grid two">
@@ -156,41 +108,32 @@
           </div>
         </div>
 
+        <!-- 02 · Ubicación en el mapa -->
         <div class="form-section location-section">
-          <div class="section-title"><span>02</span><div><h3>Ubicación del problema</h3><p>Registre el lugar donde ocurre la situación, no necesariamente su ubicación actual.</p></div></div>
-          <div class="location-note" role="note">
-            <strong>Usted conserva el control de la ubicación.</strong>
-            <span>Puede obtener las coordenadas actuales como punto inicial y modificarlas antes de continuar.</span>
-          </div>
-          <div class="location-layout">
-            <div class="coordinate-card">
-              <div class="form-grid two">
-                <div class="field">
-                  <label for="latitude">Latitud *</label>
-                  <input id="latitude" name="latitude" type="number" step="any" min="-90" max="90" inputmode="decimal" placeholder="Ej. -3.99313" required>
-                  <span class="error" id="latitude-error"></span>
-                </div>
-                <div class="field">
-                  <label for="longitude">Longitud *</label>
-                  <input id="longitude" name="longitude" type="number" step="any" min="-180" max="180" inputmode="decimal" placeholder="Ej. -79.20422" required>
-                  <span class="error" id="longitude-error"></span>
-                </div>
+          <div class="section-title"><span>02</span><div><h3>Ubicación del problema *</h3><p>Toque el mapa en el lugar del problema. Puede arrastrar el marcador para ajustarlo.</p></div></div>
+          <div id="mapa" class="mapa" role="application" aria-label="Mapa: toque para marcar el lugar del problema"></div>
+          <div class="mapa-controles">
+            <button class="button location-button" id="get-location" type="button">📍 Usar mi ubicación actual</button>
+            <div class="form-grid two coordenadas">
+              <div class="field">
+                <label for="latitude">Latitud</label>
+                <input id="latitude" name="latitude" type="number" step="any" min="-90" max="90" inputmode="decimal" placeholder="Toque el mapa">
               </div>
-              <button class="button location-button" id="get-location" type="button">Usar mi ubicación actual como referencia</button>
-              <p class="microcopy" id="location-message">El navegador solicitará permiso. Las coordenadas permanecerán en este dispositivo hasta que envíe el reporte.</p>
-            </div>
-            <div class="location-visual" aria-hidden="true">
-              <div class="grid-lines"></div>
-              <div class="pin"><span></span></div>
-              <p>Lugar del problema</p>
+              <div class="field">
+                <label for="longitude">Longitud</label>
+                <input id="longitude" name="longitude" type="number" step="any" min="-180" max="180" inputmode="decimal" placeholder="Toque el mapa">
+              </div>
             </div>
           </div>
+          <span class="error" id="location-error"></span>
+          <p class="microcopy" id="location-message">Marque el lugar donde ocurre el problema, que no necesariamente es donde usted está ahora.</p>
         </div>
 
+        <!-- 03 · Evidencia y descripción -->
         <div class="form-section">
-          <div class="section-title"><span>03</span><div><h3>Evidencia y descripción</h3><p>Adjunte una foto del problema: la IA le sugerirá una descripción.</p></div></div>
+          <div class="section-title"><span>03</span><div><h3>Evidencia y descripción</h3><p>Al enviar, la IA revisará si la foto corresponde al problema y le sugerirá una descripción.</p></div></div>
           <div class="field upload-field">
-            <label for="evidence">Imagen de evidencia <span class="optional">Opcional</span></label>
+            <label for="evidence">Fotografía del problema <span class="optional">Opcional</span></label>
             <input id="evidence" name="evidence" type="file" accept="image/jpeg,image/png,image/webp">
             <label class="upload-box" for="evidence">
               <span class="upload-icon" aria-hidden="true">＋</span>
@@ -199,15 +142,14 @@
             </label>
             <span class="error" id="evidence-error"></span>
             <div id="file-preview" class="file-preview" hidden></div>
-            <div id="ia-box" class="ia-box" role="status" aria-live="polite" hidden></div>
           </div>
           <div class="field">
             <div class="label-row"><label for="comment">Descripción del problema <span class="optional">Opcional</span></label><span id="comment-count">0/300</span></div>
-            <textarea id="comment" name="comment" maxlength="300" rows="4" placeholder="Describa qué ocurre, desde cuándo y cómo afecta al sector."></textarea>
-            <span class="error" id="comment-error"></span>
+            <textarea id="comment" name="comment" maxlength="300" rows="3" placeholder="Describa qué ocurre, desde cuándo y cómo afecta al sector."></textarea>
           </div>
         </div>
 
+        <!-- 04 · Contexto -->
         <div class="form-section">
           <div class="section-title"><span>04</span><div><h3>Contexto del reporte</h3><p>Responda sin proporcionar nombres, correo ni otros identificadores.</p></div></div>
           <div class="form-grid two">
@@ -249,51 +191,33 @@
         </div>
 
         <div class="form-footer">
-          <div class="privacy-reminder"><strong>Revisión previa</strong><span>Los datos se enviarán únicamente después de su confirmación.</span></div>
+          <div class="privacy-reminder"><strong>Este formulario no sustituye los canales de emergencia.</strong><span>Si adjuntó una foto, verá la revisión de la IA antes de confirmar.</span></div>
           <div class="actions">
-            <button class="button secondary" type="button" data-back="2">Volver</button>
-            <button class="button primary" type="submit">Revisar reporte</button>
+            <button class="button primary" id="enviar" type="submit">Enviar reporte</button>
           </div>
         </div>
       </form>
     </section>
 
-    <!-- Paso 4 · Revisión -->
-    <section class="panel step-panel" id="step-4" data-step="4" aria-labelledby="review-title" hidden>
-      <div class="panel-heading compact review-heading">
-        <div>
-          <p class="step-kicker">Paso 4 de 4</p>
-          <h2 id="review-title">Revisión del reporte</h2>
-          <p>Compruebe la información antes de enviarla al equipo investigador.</p>
-        </div>
-        <span class="not-sent">No enviado</span>
-      </div>
-      <div id="report-summary" class="summary-grid"></div>
-      <div id="map-preview" class="map-preview" aria-label="Mapa de la ubicación reportada"></div>
-      <div class="prototype-warning" role="note">
-        <strong>Confirmación necesaria</strong>
-        <span>Al seleccionar “Enviar reporte”, la información y la imagen opcional se almacenarán en el proyecto de investigación. Este formulario no sustituye los canales de emergencia.</span>
-      </div>
-      <div class="actions review-actions">
-        <button class="button secondary" type="button" data-back="3">Editar reporte</button>
-        <button class="button secondary" id="reset-form" type="button">Reiniciar</button>
-        <button class="button primary" id="submit-report" type="button">Enviar reporte</button>
-      </div>
-    </section>
-
     <section class="panel end-panel" id="end-panel" hidden aria-labelledby="end-title">
       <div class="end-symbol" aria-hidden="true">✓</div>
-      <p class="eyebrow">Proceso finalizado</p>
+      <p class="eyebrow">Reporte enviado</p>
       <h2 id="end-title" tabindex="-1">Gracias por su participación</h2>
-      <p id="end-message">Su decisión ha sido respetada. No se habilitó el cuestionario ni se guardó información.</p>
-      <button class="button secondary" id="start-over" type="button">Volver al inicio</button>
+      <p id="end-message"></p>
+      <button class="button secondary" id="start-over" type="button">Enviar otro reporte</button>
     </section>
   </main>
 
+  <!-- Resultado de la revisión de la foto, antes de confirmar el envío -->
+  <dialog id="dialogo-ia" class="dialogo" aria-labelledby="dialogo-titulo">
+    <div id="dialogo-cuerpo"></div>
+  </dialog>
+
   <footer>
     <span>Universidad Técnica Particular de Loja</span>
-    <span><a href="admin.html">Administración</a> · Ciencia Ciudadana · ISO 37120</span>
+    <span><a href="historial.html#encuestas">Administración</a> · Ciencia Ciudadana · ISO 37120</span>
   </footer>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
   <script type="module" src="js/reporte.js"></script>
 </body>
 </html>
