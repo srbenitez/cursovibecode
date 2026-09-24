@@ -420,3 +420,8 @@ footer a { color: var(--blue); font-weight: 800; }
   .mapa { height: 300px; }
   .mapa-controles .location-button { width: 100%; }
 }
+
+/* Formulario en dos partes */
+.steps.dos-partes ol { grid-template-columns: repeat(2, 1fr); max-width: 520px; }
+.parte1-error { margin: 0 34px; }
+@media (max-width: 560px) { .parte1-error { margin: 0 18px; } }

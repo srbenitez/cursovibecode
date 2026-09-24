@@ -4,9 +4,9 @@ Sitio del proyecto *Monitoreo inteligente para comunidades sostenibles* (Guía 0
 
 | Página | Para quién | Qué hace |
 |---|---|---|
-| **Reportar** (`index.html`) | Ciudadanía, sin cuenta | Formulario en una sola página, con mapa para marcar el lugar. Al enviar, la IA revisa la foto y le muestra a la persona si corresponde al problema, con una descripción sugerida. Se guarda en Supabase. |
+| **Reportar** (`index.html`) | Ciudadanía, sin cuenta | Formulario en dos partes: (1) privacidad y mayoría de edad; (2) el formulario, con mapa para marcar el lugar. Al enviar, la IA revisa la foto y le muestra a la persona si corresponde al problema, con una descripción sugerida. Se guarda en Supabase. |
 | **Validar imagen** (`validar.html`) | Equipo investigador | Analiza una imagen contra una subcategoría y permite marcar ✓/✗. |
-| **Historial** (`historial.html`) | Administradores | Pestañas: **Imágenes enviadas** (validar lo que dijo la IA), **Encuestas enviadas** (tabla, detalle con mapa y foto, estado, CSV) y **Análisis manuales**. |
+| **Historial** (`historial.html`) | Administradores | Pestañas: **Imágenes enviadas** (validar lo que dijo la IA; botón **Validar con IA** si no alcanzó a revisarla), **Encuestas enviadas** (tabla, detalle con mapa y foto, estado, CSV) y **Análisis manuales**. |
 | Proyecto, Investigadores, Contacto | Público | Información del proyecto. |
 
 ```

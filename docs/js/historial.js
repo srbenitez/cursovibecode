@@ -83,6 +83,7 @@ async function pintarImagenes() {
   let lista = reportes.filter((r) => r.evidencia_ruta);
   if (filtroImg === "pendientes") lista = lista.filter((r) => !r.imagen_revisada_en);
   if (filtroImg === "no") lista = lista.filter((r) => r.ia_relacionada === "no");
+  if (filtroImg === "sin-ia") lista = lista.filter((r) => !r.ia_relacionada);
   if (filtroImg === "validadas") lista = lista.filter((r) => r.imagen_revisada_en);
   $("#resumen-imagenes").textContent = lista.length
     ? `${lista.length} imagen(es).` : "No hay imágenes con este filtro.";
@@ -113,7 +114,12 @@ function pintarTarjetaImagen(div, r, url) {
       <dl>
         <dt>Lo que ve la IA</dt><dd>${esc(r.ia_descripcion)}</dd>
         <dt>Motivo</dt><dd>${esc(r.ia_motivo)}</dd>
-      </dl>` : `<div class="advertencia">La IA no revisó esta imagen. Decida usted si corresponde al problema.</div>`;
+      </dl>` : `
+      <div class="advertencia">La IA no alcanzó a revisar esta imagen cuando se envió el reporte.</div>
+      <div class="fila-botones">
+        <button class="button primary validar-ia">🤖 Validar con IA</button>
+      </div>
+      <p class="mensaje msg-ia"></p>`;
 
   div.innerHTML = `
     <article class="admin-card resultado">
@@ -127,6 +133,28 @@ function pintarTarjetaImagen(div, r, url) {
       </div>
     </article>`;
   pintarValidacion(div.querySelector(".revision"), r);
+
+  const boton = div.querySelector(".validar-ia");
+  if (boton) boton.onclick = async () => {
+    const msg = div.querySelector(".msg-ia");
+    boton.disabled = true;
+    boton.classList.add("ia-cargando");
+    msg.className = "mensaje msg-ia";
+    msg.textContent = "Revisando la fotografía con la IA… (unos segundos)";
+    const { data, error } = await supabase.functions.invoke("sugerir-descripcion", { body: { reporte_id: r.id } });
+    if (error || data?.error) {
+      let detalle = data?.error;
+      try { detalle ??= (await error?.context?.json())?.error; } catch { /* sin cuerpo */ }
+      msg.className = "mensaje msg-ia error";
+      msg.textContent = "No se pudo validar: " + (detalle || error?.message || "intente de nuevo");
+      boton.disabled = false;
+      boton.classList.remove("ia-cargando");
+      return;
+    }
+    const { data: fila } = await supabase.from("v_reportes").select("*").eq("id", r.id).single();
+    if (fila) Object.assign(r, fila);
+    pintarTarjetaImagen(div, r, url);
+  };
 }
 
 function opciones(sel) {

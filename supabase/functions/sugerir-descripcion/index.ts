@@ -1,16 +1,21 @@
-// Edge Function «sugerir-descripcion» (formulario ciudadano, sin inicio de sesión)
-// Entrada (POST JSON): { imagen_base64: string (JPEG), subcategoria_id: number }
+// Edge Function «sugerir-descripcion»
+// Dos usos:
+//  1. Formulario ciudadano (sin inicio de sesión), antes de enviar:
+//     entrada { imagen_base64: string (JPEG), subcategoria_id: number }.
+//     Revisa si la foto representa el problema y propone una descripción.
+//     NO guarda la imagen: solo el resultado.
+//  2. Historial del equipo (administradores), para un reporte que la IA no
+//     alcanzó a revisar: entrada { reporte_id: uuid }. Lee la foto guardada,
+//     la revisa y enlaza el resultado con el reporte.
 // Salida: { sugerencia_id, relacionada, observabilidad, descripcion, motivo,
 //           confianza, datos_identificables }
-//
-// Antes de enviar el formulario, revisa si la foto representa el problema
-// elegido y propone una descripción. NO guarda la imagen: solo el resultado.
 //
 // Archivo único: se puede pegar tal cual en el editor del panel de Supabase.
 // Secretos: ANTHROPIC_API_KEY (el mismo de «analizar-imagen»).
 
 import Anthropic from "npm:@anthropic-ai/sdk";
 import { createClient } from "jsr:@supabase/supabase-js@2";
+import { encodeBase64 } from "jsr:@std/encoding@1/base64";
 
 // ═══════════════ MÉTODO ═══════════════
 const VERSION = "f1.0";
@@ -89,28 +94,58 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
   if (req.method !== "POST") return json({ error: "Use POST" }, 405);
 
-  let imagen: string, subcategoriaId: number;
+  let cuerpo: { imagen_base64?: string; subcategoria_id?: number; reporte_id?: string };
   try {
-    ({ imagen_base64: imagen, subcategoria_id: subcategoriaId } = await req.json());
-    if (typeof imagen !== "string" || !imagen || !Number.isInteger(subcategoriaId)) throw new Error();
+    cuerpo = await req.json();
   } catch {
-    return json({ error: "Se requieren imagen_base64 y subcategoria_id" }, 400);
+    return json({ error: "Cuerpo JSON inválido" }, 400);
   }
-  if (imagen.length > MAX_BASE64) return json({ error: "La imagen es demasiado grande" }, 413);
-  if (!imagen.startsWith("/9j/")) return json({ error: "La imagen debe ser JPEG" }, 415);
 
-  // Límites de uso
-  const ipHash = await huellaIp(req);
-  const haceUnaHora = new Date(Date.now() - 3600_000).toISOString();
-  const haceUnDia = new Date(Date.now() - 86400_000).toISOString();
-  const [{ count: usoIp }, { count: usoTotal }] = await Promise.all([
-    supabase.from("sugerencia_ia").select("id", { count: "exact", head: true })
-      .eq("ip_hash", ipHash).gte("creado_en", haceUnaHora),
-    supabase.from("sugerencia_ia").select("id", { count: "exact", head: true })
-      .gte("creado_en", haceUnDia),
-  ]);
-  if ((usoIp ?? 0) >= MAX_POR_IP_POR_HORA || (usoTotal ?? 0) >= MAX_TOTAL_POR_DIA) {
-    return json({ error: "Se alcanzó el límite de revisiones automáticas. Puede enviar el reporte sin la sugerencia." }, 429);
+  let imagen: string, subcategoriaId: number, ipHash: string;
+  let reporteId: string | null = null;
+
+  if (cuerpo.reporte_id) {
+    // ── Uso 2: un administrador pide revisar la foto de un reporte ya enviado
+    const token = req.headers.get("Authorization")?.replace("Bearer ", "") ?? "";
+    const { data: auth } = await supabase.auth.getUser(token);
+    const email = auth?.user?.email?.toLowerCase();
+    const { data: admin } = email
+      ? await supabase.from("administradores").select("email").eq("email", email).maybeSingle()
+      : { data: null };
+    if (!admin) return json({ error: "Solo un administrador puede validar reportes enviados" }, 403);
+
+    const { data: reporte } = await supabase.from("reportes_ciudadanos")
+      .select("id, subcategoria_id, evidencia_ruta").eq("id", cuerpo.reporte_id).single();
+    if (!reporte?.evidencia_ruta) return json({ error: "El reporte no tiene fotografía" }, 404);
+    const { data: archivo } = await supabase.storage.from("reportes-evidencias").download(reporte.evidencia_ruta);
+    if (!archivo) return json({ error: "No se pudo leer la fotografía guardada" }, 500);
+
+    imagen = encodeBase64(new Uint8Array(await archivo.arrayBuffer()));
+    subcategoriaId = reporte.subcategoria_id;
+    reporteId = reporte.id;
+    ipHash = "admin:" + email;
+  } else {
+    // ── Uso 1: formulario ciudadano, con límites de uso
+    imagen = cuerpo.imagen_base64 ?? "";
+    subcategoriaId = Number(cuerpo.subcategoria_id);
+    if (!imagen || !Number.isInteger(subcategoriaId)) {
+      return json({ error: "Se requieren imagen_base64 y subcategoria_id" }, 400);
+    }
+    if (imagen.length > MAX_BASE64) return json({ error: "La imagen es demasiado grande" }, 413);
+    if (!imagen.startsWith("/9j/")) return json({ error: "La imagen debe ser JPEG" }, 415);
+
+    ipHash = await huellaIp(req);
+    const haceUnaHora = new Date(Date.now() - 3600_000).toISOString();
+    const haceUnDia = new Date(Date.now() - 86400_000).toISOString();
+    const [{ count: usoIp }, { count: usoTotal }] = await Promise.all([
+      supabase.from("sugerencia_ia").select("id", { count: "exact", head: true })
+        .eq("ip_hash", ipHash).gte("creado_en", haceUnaHora),
+      supabase.from("sugerencia_ia").select("id", { count: "exact", head: true })
+        .gte("creado_en", haceUnDia),
+    ]);
+    if ((usoIp ?? 0) >= MAX_POR_IP_POR_HORA || (usoTotal ?? 0) >= MAX_TOTAL_POR_DIA) {
+      return json({ error: "Se alcanzó el límite de revisiones automáticas. Puede enviar el reporte sin la sugerencia." }, 429);
+    }
   }
 
   const { data: sub } = await supabase
@@ -163,6 +198,10 @@ Deno.serve(async (req) => {
 
   if (!resultado) {
     return json({ error: "No fue posible revisar la imagen ahora. Puede continuar sin la sugerencia." }, 502);
+  }
+  // Uso 2: enlazar el resultado con el reporte
+  if (reporteId && guardada?.id) {
+    await supabase.from("reportes_ciudadanos").update({ sugerencia_id: guardada.id }).eq("id", reporteId);
   }
   return json({ sugerencia_id: guardada?.id ?? null, ...resultado });
 });

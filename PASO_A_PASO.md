@@ -155,7 +155,7 @@ Si algo no se resuelve, copie el mensaje de error exacto (sin claves) y compárt
 
 # Parte B · Formulario ciudadano con revisión de imagen por IA
 
-La página **Reportar** (`index.html`) es el formulario público, **en una sola página**: consentimiento, clasificación, **mapa para marcar el lugar**, foto, contexto y **Enviar**. Al presionar Enviar, si hay foto, la IA la revisa y **le muestra el resultado a la persona** antes de confirmar: si corresponde al problema (con una descripción sugerida) o si no lo representa. El equipo valida esas imágenes y ve las encuestas en **Validar imagen → Historial**.
+La página **Reportar** (`index.html`) es el formulario público, en **dos partes**: **(1)** privacidad y mayoría de edad; **(2)** el formulario, con **mapa para marcar el lugar**, foto, contexto y **Enviar**. Al presionar Enviar, si hay foto, la IA la revisa y **le muestra el resultado a la persona** antes de confirmar: si corresponde al problema (con una descripción sugerida) o si no lo representa. El equipo valida esas imágenes y ve las encuestas en **Validar imagen → Historial**.
 
 ## Paso B1 · Crear la base del formulario (si aún no lo hizo)
 1. Abra en GitHub **`supabase/sql/02_formulario_reportes.sql`** → **Copy raw file**.
@@ -167,7 +167,9 @@ La página **Reportar** (`index.html`) es el formulario público, **en una sola 
 2. Supabase → **SQL Editor → New query** → pegue → **Run**.
 3. Debe aparecer `validaciones = 0`.
 
-## Paso B3 · Crear la función que revisa la foto
+## Paso B3 · Crear (o actualizar) la función que revisa la foto
+> **Si ya la había creado:** debe volver a pegar el código, porque ahora también atiende el botón «Validar con IA» del historial. En **Edge Functions → sugerir-descripcion → Code**, reemplace todo el código por el nuevo y presione **Deploy**.
+
 1. En GitHub abra **`supabase/functions/sugerir-descripcion/index.ts`** → **Copy raw file**.
 2. Supabase → **Edge Functions → Deploy a new function → Via Editor** → borre el ejemplo → pegue.
 3. Nombre: **`sugerir-descripcion`** (exactamente así) → **Deploy function**.
@@ -183,12 +185,13 @@ insert into administradores (email) values ('otra.persona@utpl.edu.ec');
 
 ## Paso B5 · Probar
 1. Abra `https://srbenitez.github.io/cursovibecode/` en una **ventana privada**.
-2. Marque **Acepto participar** y **Tengo 18 años o más**. Elija **Transporte → Falta de ciclovías** y **toque el mapa** donde está el problema.
-3. Adjunte una foto de **basura**, complete el resto y presione **Enviar reporte**.
-4. Debe abrirse una ventana: **«✗ La foto no parece representar Falta de ciclovías»**. Presione **Revisar la categoría**.
-5. Cambie a **Residuos sólidos → Acumulación de basura** y presione **Enviar reporte**. Ahora debe decir **«✓ La foto corresponde…»**, con una descripción sugerida. Presione **Confirmar y enviar**.
-6. En su navegador normal: **Validar imagen → Historial**.
-   - **Imágenes enviadas:** la foto, con lo que dijo la IA. Marque **✓ Sí, acertó** o **✗ No, se equivocó**.
+2. **Parte 1:** elija **Acepto participar** y **Sí, tengo 18 años o más** → **Continuar al formulario**. (Pruebe también «No acepto»: debe terminar sin mostrar el formulario.)
+3. **Parte 2:** elija **Transporte → Falta de ciclovías** y **toque el mapa** donde está el problema.
+4. Adjunte una foto de **basura**, complete el resto y presione **Enviar reporte**.
+5. Debe abrirse una ventana: **«✗ La foto no parece representar Falta de ciclovías»**. Presione **Revisar la categoría**.
+6. Cambie a **Residuos sólidos → Acumulación de basura** y presione **Enviar reporte**. Ahora debe decir **«✓ La foto corresponde…»**, con una descripción sugerida. Presione **Confirmar y enviar**.
+7. En su navegador normal: **Validar imagen → Historial**.
+   - **Imágenes enviadas:** la foto, con lo que dijo la IA. Marque **✓ Sí, acertó** o **✗ No, se equivocó**. Si la IA no alcanzó a revisarla (filtro **Sin revisión de la IA**), presione **🤖 Validar con IA** o decida usted directamente.
    - **Encuestas enviadas:** todas las respuestas, con mapa, foto, estado y **Exportar CSV**.
 
 ## Límites y costo del formulario

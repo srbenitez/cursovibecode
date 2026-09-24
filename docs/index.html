@@ -31,7 +31,7 @@
       <div>
         <p class="eyebrow">Ciencia Ciudadana · ISO 37120</p>
         <h1 id="page-title">Reporte ciudadano</h1>
-        <p>Registre un problema de su comunidad en una sola página: marque el lugar en el mapa, adjunte una foto si la tiene y envíe. Al enviar, una inteligencia artificial revisará la foto y le mostrará el resultado.</p>
+        <p>Registre un problema de su comunidad en dos partes: primero acepte la privacidad y confirme su edad; después complete el formulario, marque el lugar en el mapa y envíe. Si adjunta una foto, una inteligencia artificial la revisará al enviar y le mostrará el resultado.</p>
       </div>
       <div class="local-badge" role="note">
         <span class="lock" aria-hidden="true">●</span>
@@ -41,31 +41,65 @@
 
     <div id="status" class="status" role="status" aria-live="polite"></div>
 
-    <section class="panel" id="formulario" aria-labelledby="report-title">
+    <nav class="steps dos-partes" aria-label="Partes del formulario">
+      <ol>
+        <li class="active" data-parte="1"><span>1</span><em>Privacidad y edad</em></li>
+        <li data-parte="2"><span>2</span><em>Formulario</em></li>
+      </ol>
+    </nav>
+
+    <!-- Parte 1 · Privacidad y mayoría de edad -->
+    <section class="panel" id="parte-1" aria-labelledby="consent-title">
+      <div class="panel-heading">
+        <p class="step-kicker">Parte 1 de 2</p>
+        <h2 id="consent-title">Consentimiento informado y privacidad</h2>
+        <p>Lea la información antes de decidir si desea participar.</p>
+      </div>
+      <div class="consent-text" tabindex="0">
+            <p>Se le invita a participar en el estudio <strong>“Monitoreo inteligente para comunidades sostenibles basado en la metodología Citizen Science”</strong>, desarrollado por la Universidad Técnica Particular de Loja, bajo la responsabilidad del Mgtr. Segundo Raymundo Benítez Hurtado.</p>
+            <p>El propósito del estudio es recopilar y analizar reportes ciudadanos sobre problemáticas comunitarias para apoyar el monitoreo de comunidades sostenibles. Su participación consiste en responder este formulario sobre un problema de su comunidad. El formulario recopilará la ubicación del problema y, de forma opcional, una fotografía como evidencia.</p>
+            <p><strong>Uso de inteligencia artificial.</strong> Si adjunta una fotografía, al enviar el formulario esta se enviará a un servicio de inteligencia artificial (Claude, de la empresa Anthropic) para verificar si corresponde al problema elegido y sugerir una descripción. Usted verá el resultado antes de confirmar el envío.</p>
+            <p>Su participación es voluntaria, no implica costos ni compensación económica. Puede retirarse antes de enviar el formulario sin ningún perjuicio. Los datos serán tratados de forma confidencial y utilizados únicamente con fines académicos y científicos. No se publicarán datos personales, coordenadas exactas sensibles ni evidencias que permitan identificar personas, viviendas o placas. Las evidencias identificables serán eliminadas o excluidas antes del análisis. Los datos anonimizados se conservarán hasta septiembre de 2027.</p>
+            <p>Al seleccionar <strong>“Acepto participar”</strong>, manifiesto mi consentimiento libre, informado y expreso. Esta aceptación electrónica reemplaza mi firma física conforme a la Ley de Comercio Electrónico, Firmas y Mensajes de Datos del Ecuador.</p>
+            <p>Consulte la <a href="https://www.utpl.edu.ec/privacidad" target="_blank" rel="noopener noreferrer">Política de Privacidad de la UTPL</a>. Investigador: <a href="mailto:srbenitez@utpl.edu.ec">srbenitez@utpl.edu.ec</a>. CEISH-UTPL: <a href="mailto:ceish@utpl.edu.ec">ceish@utpl.edu.ec</a> · Tel. 3701444 Ext. 3180.</p>
+          </div>
+      <fieldset class="decision-box">
+        <legend>¿Acepta participar y el tratamiento de sus datos según la política de privacidad? *</legend>
+        <label class="decision-option">
+          <input type="radio" name="consent" value="accept">
+          <span><strong>Acepto participar</strong><small>He leído el consentimiento y la política de privacidad.</small></span>
+        </label>
+        <label class="decision-option">
+          <input type="radio" name="consent" value="decline">
+          <span><strong>No acepto participar</strong><small>Finalizar sin acceder al formulario.</small></span>
+        </label>
+      </fieldset>
+      <fieldset class="decision-box narrow">
+        <legend>¿Tiene usted 18 años o más? *</legend>
+        <label class="decision-option">
+          <input type="radio" name="adult" value="yes">
+          <span><strong>Sí, tengo 18 años o más</strong></span>
+        </label>
+        <label class="decision-option">
+          <input type="radio" name="adult" value="no">
+          <span><strong>No, soy menor de 18 años</strong></span>
+        </label>
+      </fieldset>
+      <span class="error parte1-error" id="consent-error"></span>
+      <div class="actions actions-end">
+        <button class="button primary" id="continuar" type="button">Continuar al formulario</button>
+      </div>
+    </section>
+
+    <!-- Parte 2 · Formulario -->
+    <section class="panel" id="formulario" aria-labelledby="report-title" hidden>
       <div class="panel-heading compact">
+        <p class="step-kicker">Parte 2 de 2</p>
         <h2 id="report-title">Problemática comunitaria</h2>
         <p>Los campos marcados con * son obligatorios. La foto y la descripción son opcionales.</p>
       </div>
 
       <form id="report-form" novalidate>
-        <!-- 00 · Consentimiento y edad -->
-        <div class="form-section">
-          <div class="section-title"><span>00</span><div><h3>Consentimiento informado</h3><p>Lea la información antes de participar.</p></div></div>
-          <div class="consent-text consent-compacto" tabindex="0">
-            <p>Se le invita a participar en el estudio <strong>“Monitoreo inteligente para comunidades sostenibles basado en la metodología Citizen Science”</strong>, desarrollado por la Universidad Técnica Particular de Loja, bajo la responsabilidad del Mgtr. Segundo Raymundo Benítez Hurtado.</p>
-            <p>El propósito del estudio es recopilar y analizar reportes ciudadanos sobre problemáticas comunitarias para apoyar el monitoreo de comunidades sostenibles. Su participación consiste en responder este formulario sobre un problema de su comunidad. El formulario recopilará la ubicación del problema y, de forma opcional, una fotografía como evidencia.</p>
-            <p><strong>Uso de inteligencia artificial.</strong> Si adjunta una fotografía, al enviar el formulario esta se enviará a un servicio de inteligencia artificial (Claude, de la empresa Anthropic) para verificar si corresponde al problema elegido y sugerir una descripción. Usted verá el resultado antes de confirmar el envío.</p>
-            <p>Su participación es voluntaria, no implica costos ni compensación económica. Puede retirarse antes de enviar el formulario sin ningún perjuicio. Los datos serán tratados de forma confidencial y utilizados únicamente con fines académicos y científicos. No se publicarán datos personales, coordenadas exactas sensibles ni evidencias que permitan identificar personas, viviendas o placas. Las evidencias identificables serán eliminadas o excluidas antes del análisis. Los datos anonimizados se conservarán hasta septiembre de 2027.</p>
-            <p>Al marcar <strong>“Acepto participar”</strong>, manifiesto mi consentimiento libre, informado y expreso. Esta aceptación electrónica reemplaza mi firma física conforme a la Ley de Comercio Electrónico, Firmas y Mensajes de Datos del Ecuador.</p>
-            <p>Consulte la <a href="https://www.utpl.edu.ec/privacidad" target="_blank" rel="noopener noreferrer">Política de Privacidad de la UTPL</a>. Investigador: <a href="mailto:srbenitez@utpl.edu.ec">srbenitez@utpl.edu.ec</a>. CEISH-UTPL: <a href="mailto:ceish@utpl.edu.ec">ceish@utpl.edu.ec</a> · Tel. 3701444 Ext. 3180.</p>
-          </div>
-          <div class="check-grid consentimiento">
-            <label><input type="checkbox" id="consent" name="consent"><span><strong>Acepto participar</strong> en el estudio *</span></label>
-            <label><input type="checkbox" id="adult" name="adult"><span><strong>Tengo 18 años o más</strong> *</span></label>
-          </div>
-          <span class="error" id="consent-error"></span>
-        </div>
-
         <!-- 01 · Clasificación -->
         <div class="form-section">
           <div class="section-title"><span>01</span><div><h3>Clasificación</h3><p>Indique qué sucede y con qué frecuencia.</p></div></div>
@@ -193,6 +227,7 @@
         <div class="form-footer">
           <div class="privacy-reminder"><strong>Este formulario no sustituye los canales de emergencia.</strong><span>Si adjuntó una foto, verá la revisión de la IA antes de confirmar.</span></div>
           <div class="actions">
+            <button class="button secondary" id="volver-parte-1" type="button">Volver</button>
             <button class="button primary" id="enviar" type="submit">Enviar reporte</button>
           </div>
         </div>
@@ -201,10 +236,10 @@
 
     <section class="panel end-panel" id="end-panel" hidden aria-labelledby="end-title">
       <div class="end-symbol" aria-hidden="true">✓</div>
-      <p class="eyebrow">Reporte enviado</p>
+      <p class="eyebrow" id="end-eyebrow">Reporte enviado</p>
       <h2 id="end-title" tabindex="-1">Gracias por su participación</h2>
       <p id="end-message"></p>
-      <button class="button secondary" id="start-over" type="button">Enviar otro reporte</button>
+      <button class="button secondary" id="start-over" type="button">Volver al inicio</button>
     </section>
   </main>
 

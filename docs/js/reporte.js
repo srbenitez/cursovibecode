@@ -192,14 +192,59 @@ document.querySelectorAll('input[name="affected"]').forEach((input) => {
   });
 });
 
-["consent", "adult"].forEach((id) => $(id).addEventListener("change", () => clearError("consent")));
+// ── Parte 1: privacidad y mayoría de edad ───────────────────────────────────
+document.querySelectorAll('#parte-1 input[type="radio"]').forEach((i) =>
+  i.addEventListener("change", () => clearError("consent")));
+
+function mostrarParte(n) {
+  $("parte-1").hidden = n !== 1;
+  $("formulario").hidden = n !== 2;
+  $("end-panel").hidden = true;
+  document.querySelectorAll("[data-parte]").forEach((li) => {
+    const k = Number(li.dataset.parte);
+    li.classList.toggle("active", k === n);
+    li.classList.toggle("complete", k < n);
+  });
+  document.querySelector(".dos-partes").hidden = false;
+  announce("");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  if (n === 2) requestAnimationFrame(() => mapa?.invalidateSize()); // el mapa se creó oculto
+}
+
+function terminar(titulo, mensaje) {
+  $("parte-1").hidden = true;
+  $("formulario").hidden = true;
+  document.querySelector(".dos-partes").hidden = true;
+  $("end-eyebrow").textContent = titulo;
+  $("end-message").textContent = mensaje;
+  $("end-panel").hidden = false;
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  $("end-title").focus({ preventScroll: true });
+}
+
+$("continuar").addEventListener("click", () => {
+  const consent = document.querySelector('input[name="consent"]:checked')?.value;
+  const adult = document.querySelector('input[name="adult"]:checked')?.value;
+  if (!consent || !adult) {
+    return setError("consent", "Responda las dos preguntas para continuar.");
+  }
+  if (consent === "decline") {
+    return terminar("Proceso finalizado", "Su decisión ha sido respetada. No se habilitó el formulario ni se guardó información.");
+  }
+  if (adult === "no") {
+    return terminar("Proceso finalizado", "El formulario está dirigido únicamente a personas de 18 años o más. El proceso finalizó sin guardar información.");
+  }
+  mostrarParte(2);
+});
+
+$("volver-parte-1").addEventListener("click", () => mostrarParte(1));
 
 // Al corregir una respuesta, se borra su mensaje de error.
 reportForm.addEventListener("change", (ev) => {
   const el = ev.target;
   if (el.type === "radio" || el.type === "checkbox") {
     const error = $(`${el.name === "roles" ? "roles" : el.name}-error`);
-    if (error && el.name !== "consent" && el.name !== "adult") error.textContent = "";
+    if (error) error.textContent = "";
   } else if (el.id) {
     clearError(el.id);
   }
@@ -228,11 +273,6 @@ function validar() {
   let primero = null;
   const marcar = (el) => { primero ||= el; };
 
-  clearError("consent");
-  if (!$("consent").checked || !$("adult").checked) {
-    setError("consent", "Para enviar, marque que acepta participar y que tiene 18 años o más.");
-    marcar($("consent"));
-  }
   ["category", "subcategory", "frequency", "age-range"].forEach((id) => {
     clearError(id);
     if (!$(id).value) { setError(id, "Este campo es obligatorio."); marcar($(id)); }
@@ -397,11 +437,7 @@ async function guardar(ia) {
     const nota = !imagen ? "" : ia?.relacionada === "si"
       ? " La revisión automática confirmó que su foto corresponde al problema."
       : " El equipo investigador revisará su foto.";
-    $("end-message").textContent = `Código de referencia: ${id.slice(0, 8).toUpperCase()}.${nota}`;
-    $("formulario").hidden = true;
-    $("end-panel").hidden = false;
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    $("end-title").focus({ preventScroll: true });
+    terminar("Reporte enviado", `Código de referencia: ${id.slice(0, 8).toUpperCase()}.${nota}`);
   } catch (e) {
     console.error(e);
     if (dialogo.open) dialogo.close();
@@ -429,9 +465,8 @@ $("start-over").addEventListener("click", () => {
   descripcionOrigen = null;
   if (marcador) { marcador.remove(); marcador = null; }
   document.querySelectorAll(".error").forEach((e) => (e.textContent = ""));
-  $("end-panel").hidden = true;
-  $("formulario").hidden = false;
-  mapa?.invalidateSize();
+  document.querySelectorAll('#parte-1 input[type="radio"]').forEach((i) => (i.checked = false));
+  mostrarParte(1);
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
