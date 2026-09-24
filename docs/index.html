@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Analizar imagen · ISO 37120</title>
+  <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+  <header>
+    <h1>Problemas comunitarios · ISO 37120</h1>
+    <nav>
+      <a href="index.html" aria-current="page">Analizar</a>
+      <a href="revision.html">Historial y revisión</a>
+      <span id="usuario"></span>
+    </nav>
+  </header>
+
+  <main id="app">
+    <section class="panel">
+      <h2 style="margin-top:0">Analizar una imagen</h2>
+      <form id="form-analisis">
+        <label for="categoria">Categoría</label>
+        <select id="categoria" required><option value="">Cargando…</option></select>
+
+        <label for="subcategoria">Subcategoría</label>
+        <select id="subcategoria" required disabled><option value="">Elija primero la categoría</option></select>
+
+        <label for="archivo">Imagen (JPG o PNG)</label>
+        <input id="archivo" type="file" accept="image/jpeg,image/png,image/webp" required>
+        <img id="vista-previa" class="vista-previa" alt="" hidden>
+
+        <div class="fila-botones"><button id="enviar" class="primario">Enviar y analizar</button></div>
+        <p class="mensaje" id="msg"></p>
+      </form>
+    </section>
+
+    <section id="resultado"></section>
+  </main>
+
+  <script type="module" src="js/analizar.js"></script>
+</body>
+</html>
