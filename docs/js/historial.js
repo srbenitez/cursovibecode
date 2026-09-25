@@ -146,7 +146,9 @@ function pintarTarjetaImagen(div, r, url) {
       let detalle = data?.error;
       try { detalle ??= (await error?.context?.json())?.error; } catch { /* sin cuerpo */ }
       msg.className = "mensaje msg-ia error";
-      msg.textContent = "No se pudo validar: " + (detalle || error?.message || "intente de nuevo");
+      msg.textContent = error?.name === "FunctionsFetchError"
+        ? "No se encontró la función «sugerir-descripcion» en Supabase. Verifique que esté desplegada con ese nombre exacto (Paso B3 de PASO_A_PASO.md)."
+        : "No se pudo validar: " + (detalle || error?.message || "intente de nuevo");
       boton.disabled = false;
       boton.classList.remove("ia-cargando");
       return;
@@ -203,7 +205,9 @@ function pintarValidacion(zona, r) {
     const { error } = await supabase.from("revision_reporte").insert({ reporte_id: r.id, ...fila });
     if (error) {
       msg.className = "mensaje error";
-      msg.textContent = "No se pudo guardar: " + error.message;
+      msg.textContent = /revision_reporte/.test(error.message)
+        ? "Falta crear la tabla de validaciones: ejecute supabase/sql/03_validacion_imagenes_enviadas.sql en el SQL Editor (Paso B2)."
+        : "No se pudo guardar: " + error.message;
       zona.querySelectorAll("button").forEach((b) => (b.disabled = false));
       return;
     }
